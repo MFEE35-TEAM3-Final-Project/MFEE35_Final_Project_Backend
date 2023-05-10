@@ -166,7 +166,8 @@ router.post("/article", adminPassport, async (req, res) => {
       });
 
     const adminId = req.user[0].admin_id;
-    const { title, sub_title, category, content, is_published } = req.body;
+    const { title, sub_title, category, cover_image, content, is_published } =
+      req.body;
     let articleId = uuidv4();
     const articleData = {
       article_id: articleId,
@@ -174,6 +175,7 @@ router.post("/article", adminPassport, async (req, res) => {
       title: title,
       sub_title: sub_title,
       category: category,
+      cover_image: cover_image,
       content: content,
       is_published: is_published
     };
@@ -206,12 +208,14 @@ router.put("/article/:article_id", adminPassport, async (req, res) => {
         message: validError.details[0].message
       });
 
-    const { title, sub_title, category, content, is_published } = req.body;
+    const { title, sub_title, category, cover_image, content, is_published } =
+      req.body;
 
     const articleData = {
       title: title,
       sub_title: sub_title,
       category: category,
+      cover_image: cover_image,
       content: content,
       is_published: is_published
     };

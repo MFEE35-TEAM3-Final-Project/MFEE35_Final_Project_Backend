@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
 
     // 取得文章
     let getArticlesSql =
-      "SELECT article_id, admin_id, title, sub_title, category, is_published, created_at, updated_at FROM articles ";
+      "SELECT article_id, admin_id, title, sub_title, category, cover_image, is_published, created_at, updated_at FROM articles ";
     let getParams = [];
     if (category) {
       getArticlesSql += "WHERE category = ? ";
