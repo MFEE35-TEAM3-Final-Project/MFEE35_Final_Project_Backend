@@ -1,0 +1,13 @@
+CREATE TABLE `users` (
+  `sid` int NOT NULL AUTO_INCREMENT,
+  `userId` bigint unsigned NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `createAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`sid`),
+  UNIQUE KEY `userId_UNIQUE` (`userId`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+
+
