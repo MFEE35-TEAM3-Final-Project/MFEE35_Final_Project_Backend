@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: betadays
+-- Host: 127.0.0.1    Database: mfee35
 -- ------------------------------------------------------
--- Server version	8.0.33
+-- Server version	8.0.32
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -53,14 +53,14 @@ DROP TABLE IF EXISTS `article_comments`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `article_comments` (
   `comment_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `article_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `comment` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`comment_id`),
-  KEY `article_id_idx` (`article_id`),
-  CONSTRAINT `fk_article_comment` FOREIGN KEY (`article_id`) REFERENCES `articles` (`article_id`) ON DELETE CASCADE
+  KEY `fk_article_comment_idx` (`article_id`),
+  CONSTRAINT `fk_article_comment` FOREIGN KEY (`article_id`) REFERENCES `articles` (`article_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -74,34 +74,6 @@ LOCK TABLES `article_comments` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `article_meg`
---
-
-DROP TABLE IF EXISTS `article_meg`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `article_meg` (
-  `sid` int NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `article_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `comment` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`sid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `article_meg`
---
-
-LOCK TABLES `article_meg` WRITE;
-/*!40000 ALTER TABLE `article_meg` DISABLE KEYS */;
-INSERT INTO `article_meg` VALUES (1,'9731103331','048a772a-3bfe-4155-b622-1054d22ba75b','When I feel lonely I would buy some shares. It\'s nice to have a bit of company. :-|&lt;&gt;','2023-04-28 08:11:34','2023-04-28 08:11:34'),(2,'9731103331','048a772a-3bfe-4155-b622-1054d22ba75b','When I feel lonely I would buy some shares. It\'s nice to have a bit of company. :-|&lt;&gt;','2023-04-28 08:20:40','2023-04-28 08:20:40');
-/*!40000 ALTER TABLE `article_meg` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `articles`
 --
 
@@ -111,8 +83,9 @@ DROP TABLE IF EXISTS `articles`;
 CREATE TABLE `articles` (
   `article_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `admin_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `title` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sub_title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sub_title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `is_published` tinyint NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -127,8 +100,43 @@ CREATE TABLE `articles` (
 
 LOCK TABLES `articles` WRITE;
 /*!40000 ALTER TABLE `articles` DISABLE KEYS */;
-INSERT INTO `articles` VALUES ('048a772a-3bfe-4155-b622-1054d22ba75b','7427953964','WHA 0428',NULL,'<p>InAFFFFFFF</p>',0,'2023-04-25 04:00:13','2023-04-28 06:42:36'),('42b3b3cb-1c1d-4a07-a01a-e744e6690987','7427953964','test word',NULL,'<p>I ate banana today</p>',0,'2023-04-25 04:02:42','2023-04-25 04:02:42'),('52abda83-f635-4738-a876-0e39b1da5fcf','7427953964','test word',NULL,'<p>lakfjslakjlakj;sdsd</p>',0,'2023-04-25 03:39:15','2023-04-25 03:39:15'),('6856a789-4902-47c2-84a4-17a24a787095','6691530706','test word 0426','this is for test all.','<p>It\'s a banana~</p>',0,'2023-05-09 07:51:16','2023-05-09 07:51:16'),('80385683-2b51-43bf-9ced-cfadc87cf44d','7427953964','test word',NULL,'<p>AAAABBBdsfCC</p>',0,'2023-04-24 07:29:55','2023-04-24 07:29:55'),('80662a00-0ab6-47d1-b45b-12d489e75e89','7427953964','test word',NULL,'<p>&lt;a href=\"javascript:(alert(document.domain))\"&gt;XSS&lt;/a&gt;</p>',0,'2023-04-25 02:56:34','2023-04-25 02:56:34'),('849bdd6f-692c-446f-affc-be6819c0e34d','7427953964','test word',NULL,'<p>&lt;p&gt;&lt;a href=\"javascript:(alert(document.domain))\"&gt;XSS&lt;/a&gt;&lt;/p&gt;</p>',0,'2023-04-25 02:57:14','2023-04-25 02:57:14'),('9ac0e00a-b0f5-4b1a-b28a-9f44eb5d3a9c','6691530706','test word 0426',NULL,'<p>It\'s a banana~</p>',0,'2023-04-28 06:38:07','2023-04-28 06:38:07'),('afe19d79-5ccb-4414-a943-efb124086ff6','6691530706','test word 0426',NULL,'<p>It\'s a banana~</p>',0,'2023-04-28 06:33:48','2023-04-28 06:33:48'),('c95128a7-8e13-47a1-8405-d36fd59c459c','7427953964','test word',NULL,'<p>&lt;<strong>form</strong>&gt; &lt;<strong>math</strong>&gt;&lt;<strong>mtext</strong>&gt; &lt;/<strong>form</strong>&gt;&lt;<strong>form</strong>&gt; &lt;<strong>mglyph</strong>&gt; &lt;<strong>style</strong>&gt;&lt;/<strong>math</strong>&gt;&lt;<strong>img</strong> src onerror=alert(1)&gt;</p>',0,'2023-04-25 02:54:19','2023-04-25 02:54:19'),('d56d168c-ce6a-4a10-b80e-54be72f23271','7427953964','test word',NULL,'<p>sadfdadadad</p>',0,'2023-04-25 01:43:07','2023-04-25 01:43:07'),('e459441c-cc1c-4e41-98bd-071cce81a49c','7427953964','test word',NULL,'<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p><p><strong>&lt;script&gt;console.log(\"hello idiot\") &lt;script/&gt;</strong></p>',0,'2023-04-25 02:54:08','2023-04-25 02:54:08'),('e83df9ba-ee7c-440a-b027-819223ce6497','7427953964','test word',NULL,'<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p>',0,'2023-04-25 02:18:40','2023-04-25 02:18:40'),('feaed32e-4a72-48d6-963a-d96869ddba15','7427953964','test word',NULL,'<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p><p><strong>&lt;script&gt;console.log(\"hello idiot\") &lt;script/&gt;</strong></p>',0,'2023-04-25 02:25:33','2023-04-25 02:25:33');
+INSERT INTO `articles` VALUES ('209fa784-0c49-4532-b7dd-fe2ee25efd0e','6691530706','HEALTHY','test word 0426','this is for test all.','<p>It\'s a banana~</p>',0,'2023-05-10 03:42:33','2023-05-10 03:42:33'),('39219673-f8cb-4504-a278-e2f23c7981ba','6691530706','FITNESS','test word 0510','this is for test all.','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:52','2023-05-10 03:43:52'),('3f52f526-d26d-437f-829f-6bd6b95f9b8d','6691530706','FITNESS','test word 0510','this is for test all.','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:54','2023-05-10 03:43:54'),('42b3b3cb-1c1d-4a07-a01a-e744e6690987','7427953964','HEALTHY','test word',NULL,'<p>I ate banana today</p>',0,'2023-04-25 04:02:42','2023-05-10 03:43:04'),('52abda83-f635-4738-a876-0e39b1da5fcf','7427953964','HEALTHY','test word',NULL,'<p>lakfjslakjlakj;sdsd</p>',0,'2023-04-25 03:39:15','2023-05-10 03:43:04'),('6d1cd5fc-d537-48ee-9086-0e0db6e8e114','6691530706','FITNESS','test word 0510','this is for test all.','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:53','2023-05-10 03:43:53'),('6dc1d5ea-1978-4599-8e24-7fe7a4dccd7c','6691530706','FITNESS','test word 0510','this is for test all.','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:54','2023-05-10 03:43:54'),('80385683-2b51-43bf-9ced-cfadc87cf44d','7427953964','HEALTHY','test word',NULL,'<p>AAAABBBdsfCC</p>',0,'2023-04-24 07:29:55','2023-05-10 03:43:04'),('80662a00-0ab6-47d1-b45b-12d489e75e89','7427953964','HEALTHY','test word',NULL,'<p>&lt;a href=\"javascript:(alert(document.domain))\"&gt;XSS&lt;/a&gt;</p>',0,'2023-04-25 02:56:34','2023-05-10 03:43:04'),('849bdd6f-692c-446f-affc-be6819c0e34d','7427953964','HEALTHY','test word',NULL,'<p>&lt;p&gt;&lt;a href=\"javascript:(alert(document.domain))\"&gt;XSS&lt;/a&gt;&lt;/p&gt;</p>',0,'2023-04-25 02:57:14','2023-05-10 03:43:04'),('9136cbab-fd0b-49be-8e0f-aa6b8b38ba40','6691530706','NUTRITION','NUTRITION test word 0510','mango','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:35','2023-05-10 03:45:35'),('9a66fa75-1198-4199-b9a3-4d2fb790cdf2','6691530706','NUTRITION','NUTRITION test word 0510','mango','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:36','2023-05-10 03:45:36'),('9ac0e00a-b0f5-4b1a-b28a-9f44eb5d3a9c','6691530706','HEALTHY','test word 0426',NULL,'<p>It\'s a banana~</p>',0,'2023-04-28 06:38:07','2023-05-10 03:43:04'),('afe19d79-5ccb-4414-a943-efb124086ff6','6691530706','HEALTHY','WHA 0428','pear','<p>InAFFFFFFF</p>',0,'2023-04-28 06:33:48','2023-05-10 03:59:06'),('c95128a7-8e13-47a1-8405-d36fd59c459c','7427953964','HEALTHY','test word',NULL,'<p>&lt;<strong>form</strong>&gt; &lt;<strong>math</strong>&gt;&lt;<strong>mtext</strong>&gt; &lt;/<strong>form</strong>&gt;&lt;<strong>form</strong>&gt; &lt;<strong>mglyph</strong>&gt; &lt;<strong>style</strong>&gt;&lt;/<strong>math</strong>&gt;&lt;<strong>img</strong> src onerror=alert(1)&gt;</p>',0,'2023-04-25 02:54:19','2023-05-10 03:43:04'),('ca560c5f-0bbb-4e2b-9dc8-90cb4ec133e6','6691530706','NUTRITION','NUTRITION test word 0510','mango','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:37','2023-05-10 03:45:37'),('d140adf0-c2a2-4f4e-a403-a8455646f95f','6691530706','NUTRITION','NUTRITION test word 0510','mango','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:34','2023-05-10 03:45:34'),('d56d168c-ce6a-4a10-b80e-54be72f23271','7427953964','HEALTHY','test word',NULL,'<p>sadfdadadad</p>',0,'2023-04-25 01:43:07','2023-05-10 03:43:04'),('db077c0f-6e0c-4b0e-86fc-e98b7b4ef9b2','6691530706','FITNESS','test word 0510','this is for test all.','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:52','2023-05-10 03:43:52'),('ddbecccf-a595-4b1c-9a3f-96f81f9570ef','6691530706','NUTRITION','NUTRITION test word 0510','mango','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:36','2023-05-10 03:45:36'),('e459441c-cc1c-4e41-98bd-071cce81a49c','7427953964','HEALTHY','test word',NULL,'<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p><p><strong>&lt;script&gt;console.log(\"hello idiot\") &lt;script/&gt;</strong></p>',0,'2023-04-25 02:54:08','2023-05-10 03:43:04'),('e83df9ba-ee7c-440a-b027-819223ce6497','7427953964','HEALTHY','test word',NULL,'<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p>',0,'2023-04-25 02:18:40','2023-05-10 03:43:04'),('feaed32e-4a72-48d6-963a-d96869ddba15','7427953964','HEALTHY','test word',NULL,'<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p><p><strong>&lt;script&gt;console.log(\"hello idiot\") &lt;script/&gt;</strong></p>',0,'2023-04-25 02:25:33','2023-05-10 03:43:04');
 /*!40000 ALTER TABLE `articles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `coupons`
+--
+
+DROP TABLE IF EXISTS `coupons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `coupons` (
+  `coupon_id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `discount_rate` decimal(10,2) NOT NULL,
+  `discount_algorithm` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `usage_limit` int DEFAULT NULL,
+  `usage_count` int DEFAULT '0',
+  `start_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`coupon_id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `coupons`
+--
+
+LOCK TABLES `coupons` WRITE;
+/*!40000 ALTER TABLE `coupons` DISABLE KEYS */;
+INSERT INTO `coupons` VALUES (3,'ABC123','特惠日優惠券',0.80,'percentage','特惠日優惠券，享有八折優惠',1000,0,'2022-06-01 00:00:00','2022-06-30 23:59:59','2023-05-10 07:06:38','2023-05-10 07:06:38'),(4,'ABC123sss','特惠日優惠券',0.80,'percentage','特惠日優惠券，享有八折優惠',1000,0,'2022-06-01 00:00:00','2022-06-30 23:59:59','2023-05-11 06:49:44','2023-05-11 06:49:44');
+/*!40000 ALTER TABLE `coupons` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -162,6 +170,31 @@ CREATE TABLE `exercise_records` (
 LOCK TABLES `exercise_records` WRITE;
 /*!40000 ALTER TABLE `exercise_records` DISABLE KEYS */;
 /*!40000 ALTER TABLE `exercise_records` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `favorite`
+--
+
+DROP TABLE IF EXISTS `favorite`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `favorite` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `favorite`
+--
+
+LOCK TABLES `favorite` WRITE;
+/*!40000 ALTER TABLE `favorite` DISABLE KEYS */;
+/*!40000 ALTER TABLE `favorite` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -237,6 +270,101 @@ INSERT INTO `meal_records` VALUES (2,'6818255871','2023-05-02 00:00:00','dinner'
 UNLOCK TABLES;
 
 --
+-- Table structure for table `order_details`
+--
+
+DROP TABLE IF EXISTS `order_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_details` (
+  `detail_id` int NOT NULL AUTO_INCREMENT,
+  `order_id` char(36) NOT NULL,
+  `productid` varchar(50) NOT NULL,
+  `quantity` int NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`detail_id`),
+  KEY `product_id` (`productid`),
+  KEY `order_details_ibfk_1` (`order_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_details`
+--
+
+LOCK TABLES `order_details` WRITE;
+/*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
+INSERT INTO `order_details` VALUES (53,'4428f229-bed4-4c40-8c1f-73c3d6709402','04b15522-6e0a-448a-86fe-6f2da58da30f',2,500.00),(54,'4428f229-bed4-4c40-8c1f-73c3d6709402','0861bb46-c0b8-45c9-9b55-c53e812547de',1,500.00),(55,'9084c680-e179-4e70-b8da-e43a48b5eb93','0861bb46-c0b8-45c9-9b55-c53e812547de',1,500.00),(56,'9084c680-e179-4e70-b8da-e43a48b5eb93','04b15522-6e0a-448a-86fe-6f2da58da30f',2,500.00);
+/*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `order_id` char(36) NOT NULL,
+  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(50) NOT NULL,
+  `phone` varchar(10) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `coupon_code` varchar(20) DEFAULT NULL,
+  `total_quantity` int DEFAULT NULL,
+  `total_price` decimal(10,2) DEFAULT NULL,
+  `payment_method` varchar(20) DEFAULT NULL,
+  `shipping_method` varchar(20) DEFAULT NULL,
+  `shipping_address` varchar(100) DEFAULT NULL,
+  `ship_store` varchar(50) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`order_id`),
+  KEY `user_idfk_1` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES ('4428f229-bed4-4c40-8c1f-73c3d6709402','4152607872','ppppppp@gmail.com','0987654321','John Doe',NULL,3,1500.00,'credit_card',NULL,'No. 123, Main Street, Taipei City','My Store','created','2023-05-11 14:00:18'),('9084c680-e179-4e70-b8da-e43a48b5eb93','4152607872','ppppppp@gmail.com','0987654321','John Doe',NULL,3,1500.00,'credit_card',NULL,'No. 123, Main Street, Taipei City','My Store','created','2023-05-11 14:04:57');
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `shopping_cart`
+--
+
+DROP TABLE IF EXISTS `shopping_cart`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `shopping_cart` (
+  `cart_id` varchar(10) NOT NULL,
+  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productid` varchar(50) NOT NULL,
+  `quantity` int NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`cart_id`),
+  KEY `product_id` (`productid`),
+  KEY `shopping_cart_ibfk_2` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shopping_cart`
+--
+
+LOCK TABLES `shopping_cart` WRITE;
+/*!40000 ALTER TABLE `shopping_cart` DISABLE KEYS */;
+INSERT INTO `shopping_cart` VALUES ('172904','4152607872','09f437e8-169e-4dc0-80c1-f222b3719009',4,'2023-05-11 02:29:51');
+/*!40000 ALTER TABLE `shopping_cart` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -280,4 +408,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-11 16:15:56
+-- Dump completed on 2023-05-11 21:12:28
