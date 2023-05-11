@@ -11,7 +11,7 @@ const {
   adminRegValidation,
   adminLoginValidation,
   articleValid,
-  foodValid,
+  foodValid
 } = require("../models/validation");
 const { adminPassport } = require("../models/passport");
 
@@ -30,7 +30,7 @@ router.post("/register", async (req, res) => {
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
 
     const { adminname, password, email } = req.body;
@@ -56,7 +56,7 @@ router.post("/register", async (req, res) => {
         admin_id: adminId,
         adminname,
         password: hashedPassword,
-        email,
+        email
       };
       let insertSql = "INSERT INTO admins SET ?";
       const result = await query(insertSql, adminData);
@@ -65,7 +65,7 @@ router.post("/register", async (req, res) => {
         res.status(201).json({
           success: true,
           message: `管理員資料新增 ${result.affectedRows}筆 成功 ${result.insertId}`,
-          admin_id: adminId,
+          admin_id: adminId
         });
       } else {
         res.json({ success: false, message: "無法新增管理員資料" });
@@ -85,7 +85,7 @@ router.post("/login", async (req, res) => {
     if (validError) {
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
     }
 
@@ -106,7 +106,7 @@ router.post("/login", async (req, res) => {
         const tokenObj = {
           _id: matchAdmin.admin_id,
           email: matchAdmin.email,
-          exp: expDate,
+          exp: expDate
         };
         let token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
         return res.status(200).send({
@@ -114,13 +114,13 @@ router.post("/login", async (req, res) => {
           message: `管理員登入成功 `,
           admin_id: matchAdmin.admin_id,
           token: "JWT " + token,
-          exp: expDate,
+          exp: expDate
         });
       } else {
         // 密碼錯誤
         return res.json({
           success: false,
-          message: `密碼錯誤 ${matchAdmin.adminId}`,
+          message: `密碼錯誤 ${matchAdmin.adminId}`
         });
       }
     }
@@ -128,7 +128,7 @@ router.post("/login", async (req, res) => {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
@@ -142,27 +142,27 @@ router.post(
     return res.status(200).json({
       success: true,
       message: "已認證 Token",
-      admin: req.user[0],
+      admin: req.user[0]
     });
   },
   (err, req, res, next) => {
     if (err) {
       return res.json({
         success: false,
-        message: "Token 錯誤，請重新登入",
+        message: "Token 錯誤，請重新登入"
       });
     }
   }
 );
 
 // articles
-router.post("/article", async (req, res) => {
+router.post("/article", adminPassport, async (req, res) => {
   try {
     const { error: validError } = articleValid(req.body);
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
 
     const adminId = req.user[0].admin_id;
@@ -177,7 +177,7 @@ router.post("/article", async (req, res) => {
       category: category,
       cover_image: cover_image,
       content: content,
-      is_published: is_published,
+      is_published: is_published
     };
     const postArticleSql = "INSERT INTO articles SET ?";
     const postResult = await query(postArticleSql, articleData);
@@ -187,7 +187,7 @@ router.post("/article", async (req, res) => {
         success: true,
         message: "成功送出文章",
         admin_id: adminId,
-        article_id: articleId,
+        article_id: articleId
       });
     } else {
       res.json({ success: false, message: "無法新增文章" });
@@ -197,7 +197,7 @@ router.post("/article", async (req, res) => {
   }
 });
 
-router.put("/article/:article_id", async (req, res) => {
+router.put("/article/:article_id", adminPassport, async (req, res) => {
   try {
     const adminId = req.user[0].admin_id;
     const { article_id: articleId } = req.params;
@@ -205,7 +205,7 @@ router.put("/article/:article_id", async (req, res) => {
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
 
     const { title, sub_title, category, cover_image, content, is_published } =
@@ -217,7 +217,7 @@ router.put("/article/:article_id", async (req, res) => {
       category: category,
       cover_image: cover_image,
       content: content,
-      is_published: is_published,
+      is_published: is_published
     };
 
     const updateSql =
@@ -226,7 +226,7 @@ router.put("/article/:article_id", async (req, res) => {
     const updateResult = await query(updateSql, [
       articleData,
       adminId,
-      articleId,
+      articleId
     ]);
     const affectedRows = updateResult.affectedRows;
     if (affectedRows >= 1) {
@@ -234,24 +234,24 @@ router.put("/article/:article_id", async (req, res) => {
         success: true,
         message: "文章編輯成功",
         admin_id: adminId,
-        article_id: articleId,
+        article_id: articleId
       });
     } else {
       res.json({
         success: false,
-        message: "文章編輯失敗、找不到文章、編輯人不對",
+        message: "文章編輯失敗、找不到文章、編輯人不對"
       });
     }
   } catch {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
 
-router.delete("/article/:article_id", async (req, res) => {
+router.delete("/article/:article_id", adminPassport, async (req, res) => {
   try {
     const adminId = req.user[0].admin_id;
     const { article_id: articleId } = req.params;
@@ -261,31 +261,31 @@ router.delete("/article/:article_id", async (req, res) => {
     if (affectedRows >= 1) {
       res.status(201).json({
         success: true,
-        message: "已刪除文章",
+        message: "已刪除文章"
       });
     } else {
       res.json({
         success: false,
-        message: "找不到文章",
+        message: "找不到文章"
       });
     }
   } catch {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
 
-router.post("/food", async (req, res) => {
+router.post("/food", adminPassport, async (req, res) => {
   try {
     // const adminId = req.user[0].admin_id;
     const { error: validError } = foodValid(req.body);
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
     const {
       category,
@@ -303,7 +303,7 @@ router.post("/food", async (req, res) => {
       carbohydrate,
       sodium,
       dietary_fiber,
-      trans_fat,
+      trans_fat
     } = req.body;
     let foodId = uuidv4();
     const foodData = {
@@ -323,7 +323,7 @@ router.post("/food", async (req, res) => {
       carbohydrate,
       sodium,
       dietary_fiber,
-      trans_fat,
+      trans_fat
     };
     const postSql = "INSERT INTO food SET ?";
     const { affectedRows } = await query(postSql, foodData);
@@ -331,31 +331,31 @@ router.post("/food", async (req, res) => {
       res.status(201).json({
         success: true,
         message: "已新增食物",
-        food_name: sample_name,
+        food_name: sample_name
       });
     } else {
       res.json({
         success: false,
         message: "新增食物失敗",
-        food_name: sample_name,
+        food_name: sample_name
       });
     }
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
-router.put("/food/food_id=:food_id", async (req, res) => {
+router.put("/food/food_id=:food_id", adminPassport, async (req, res) => {
   try {
     const foodId = req.params.food_id;
     const { error: validError } = foodValid(req.body);
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
     const {
       category,
@@ -373,7 +373,7 @@ router.put("/food/food_id=:food_id", async (req, res) => {
       carbohydrate,
       sodium,
       dietary_fiber,
-      trans_fat,
+      trans_fat
     } = req.body;
 
     const foodData = {
@@ -393,7 +393,7 @@ router.put("/food/food_id=:food_id", async (req, res) => {
       carbohydrate,
       sodium,
       dietary_fiber,
-      trans_fat,
+      trans_fat
     };
     const updateSql = "UPDATE food SET ? WHERE food_id = ?";
     const { affectedRows } = await query(updateSql, [foodData, foodId]);
@@ -401,24 +401,24 @@ router.put("/food/food_id=:food_id", async (req, res) => {
       res.status(200).json({
         success: true,
         message: "已更新食物資訊",
-        food_name: sample_name,
+        food_name: sample_name
       });
     } else {
       res.json({
         success: false,
-        message: "更新食物資訊失敗",
+        message: "更新食物資訊失敗"
       });
     }
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
 
-router.delete("/food/food_id=:food_id", async (req, res) => {
+router.delete("/food/food_id=:food_id", adminPassport, async (req, res) => {
   try {
     const foodId = req.params.food_id;
     const delSql = "DELETE FROM food WHERE food_id = ? ";
@@ -426,21 +426,71 @@ router.delete("/food/food_id=:food_id", async (req, res) => {
     if (affectedRows >= 1) {
       res.status(201).json({
         success: true,
-        message: "已刪除食物資訊",
+        message: "已刪除食物資訊"
       });
     } else {
       res.json({
         success: false,
-        message: "找不到食物資訊",
+        message: "找不到食物資訊"
       });
     }
   } catch {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
 
+//會員列表
+router.get("/user_list", adminPassport, async (req, res) => {
+  try {
+    const { page, per_page } = req.query;
+    // 確認頁數
+    let perPage = parseInt(per_page) || 20;
+    let nowPage = parseInt(page) || 1;
+    const countSql = "SELECT COUNT(*) AS total_count FROM users ";
+    const [{ total_count: totalCount }] = await query(countSql);
+    let totalPages = Math.ceil(totalCount / perPage);
+    nowPage = nowPage > totalPages ? totalPages : nowPage;
+    // 取得會員列表
+    let getSql =
+      "SELECT user_id, username, email, avatar, gender, birthday, phone, address FROM users ORDER BY created_at DESC ";
+    let getParams = [];
+    if (!isNaN(nowPage) && nowPage > 0) {
+      getSql += "LIMIT ? OFFSET ? ";
+      getParams.push(perPage);
+      getParams.push((nowPage - 1) * perPage);
+    }
+    const getResults = await query(getSql, getParams);
+    const paginations = {
+      total_pages: totalPages,
+      current_page: nowPage,
+      per_page: perPage,
+      has_pre: nowPage >= 2,
+      has_next: nowPage < totalPages
+    };
+    if (getResults.length > 0) {
+      res.status(200).json({
+        success: true,
+        message: "已取得會員列表",
+        user_qty: totalCount,
+        users: getResults,
+        paginations
+      });
+    } else {
+      res.json({
+        success: false,
+        message: "沒有會員"
+      });
+    }
+  } catch {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "伺服器錯誤"
+    });
+  }
+});
 module.exports = router;
