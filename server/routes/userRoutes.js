@@ -123,9 +123,9 @@ router.post("/login", async (req, res) => {
         });
       } else {
         // 密碼錯誤
-        return res.json({
+        return res.status(401).json({
           success: false,
-          message: `密碼錯誤 ${matchUser.user_id}`
+          message: `密碼錯誤`
         });
       }
     }
@@ -554,11 +554,10 @@ router.delete(
   }
 );
 
-
 //user orders
-router.post('/orders', userPassport, async (req, res) => {
+router.post("/orders", userPassport, async (req, res) => {
   try {
-    const status = 'created';
+    const status = "created";
     const order_id = uuidv4();
     const {
       phone,
@@ -576,7 +575,7 @@ router.post('/orders', userPassport, async (req, res) => {
     if (!order_details || order_details.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "訂單詳情為空",
+        message: "訂單詳情為空"
       });
     }
 
@@ -598,20 +597,19 @@ router.post('/orders', userPassport, async (req, res) => {
     if (invalidDetails.length > 0) {
       return res.status(400).json({
         success: false,
-        message: `商品 ${invalidDetails.join(", ")} 庫存不足`,
+        message: `商品 ${invalidDetails.join(", ")} 庫存不足`
       });
     }
 
     if (coupon_code) {
-      const [coupon] = await query(
-        "SELECT * FROM coupons WHERE code = ?",
-        [coupon_code]
-      );
+      const [coupon] = await query("SELECT * FROM coupons WHERE code = ?", [
+        coupon_code
+      ]);
       if (coupon) {
         if (coupon.usage_count >= coupon.usage_limit) {
           return res.status(400).json({
             success: false,
-            message: "優惠券已達到使用上限",
+            message: "優惠券已達到使用上限"
           });
         } else {
           const updateSql =
@@ -621,7 +619,7 @@ router.post('/orders', userPassport, async (req, res) => {
       } else {
         return res.status(400).json({
           success: false,
-          message: "優惠券不存在",
+          message: "優惠券不存在"
         });
       }
     }
@@ -640,7 +638,7 @@ router.post('/orders', userPassport, async (req, res) => {
       payment_method,
       shipping_address,
       ship_store,
-      status,
+      status
     ];
     const result = await query(postSql, orderValues);
 
@@ -664,19 +662,19 @@ router.post('/orders', userPassport, async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: `訂單新增成功，訂單ID為 ${order_id}`,
+      message: `訂單新增成功，訂單ID為 ${order_id}`
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
 
-//會員查詢訂單 
-router.get('/orders', userPassport, async (req, res) => {
+//會員查詢訂單
+router.get("/orders", userPassport, async (req, res) => {
   try {
     const user_id = req.user[0].user_id;
     const { status } = req.query; // 獲取status查詢參數
@@ -695,17 +693,18 @@ router.get('/orders', userPassport, async (req, res) => {
     if (!orders.length) {
       return res.status(404).json({
         success: false,
-        message: "找不到任何訂單",
+        message: "找不到任何訂單"
       });
     }
 
-    const orderDetailsPromises = orders.map(async order => {
+    const orderDetailsPromises = orders.map(async (order) => {
       const { order_id } = order;
-      const getOrderDetailsSql = "SELECT order_details.quantity, order_details.price, onlineproducts.* FROM order_details JOIN onlineproducts ON order_details.productid = onlineproducts.productid WHERE order_id = ?";
+      const getOrderDetailsSql =
+        "SELECT order_details.quantity, order_details.price, onlineproducts.* FROM order_details JOIN onlineproducts ON order_details.productid = onlineproducts.productid WHERE order_id = ?";
       const orderDetails = await query(getOrderDetailsSql, [order_id]);
       return {
         ...order,
-        order_details: orderDetails,
+        order_details: orderDetails
       };
     });
 
@@ -719,12 +718,12 @@ router.get('/orders', userPassport, async (req, res) => {
     console.log(err);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
 
-router.put('/orders/:orderId', userPassport, async (req, res) => {
+router.put("/orders/:orderId", userPassport, async (req, res) => {
   try {
     const orderId = req.params.orderId;
     const { shipping_address, shipping_method, ship_store } = req.body;
@@ -736,51 +735,63 @@ router.put('/orders/:orderId', userPassport, async (req, res) => {
     if (!existingOrder) {
       return res.status(404).json({
         success: false,
-        message: "訂單不存在",
+        message: "訂單不存在"
       });
     }
 
     const updateSql =
       "UPDATE orders SET shipping_address = ?, shipping_method = ?, ship_store = ? WHERE order_id = ?";
-    const result = await query(updateSql, [shipping_address, shipping_method, ship_store, orderId]);
+    const result = await query(updateSql, [
+      shipping_address,
+      shipping_method,
+      ship_store,
+      orderId
+    ]);
 
     res.status(200).json({
       success: true,
-      message: `訂單更新成功，訂單ID為 ${orderId}`,
+      message: `訂單更新成功，訂單ID為 ${orderId}`
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
 
-
 //刪除
-router.delete('/orders/:order_id', userPassport, async (req, res) => {
+router.delete("/orders/:order_id", userPassport, async (req, res) => {
   try {
     const user_id = req.user[0].user_id;
     const order_id = req.params.order_id;
 
     // 確認訂單存在且屬於該會員
-    const [order] = await query("SELECT * FROM orders WHERE order_id = ? AND user_id = ?", [order_id, user_id]);
+    const [order] = await query(
+      "SELECT * FROM orders WHERE order_id = ? AND user_id = ?",
+      [order_id, user_id]
+    );
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: "找不到該訂單",
+        message: "找不到該訂單"
       });
     }
 
     // 刪除訂單詳情並還原產品庫存
-    const orderDetails = await query("SELECT * FROM order_details WHERE order_id = ?", [order_id]);
+    const orderDetails = await query(
+      "SELECT * FROM order_details WHERE order_id = ?",
+      [order_id]
+    );
     const detailDeletePromises = orderDetails.map((detail) => {
       const { productid, quantity } = detail;
-      const updateProductSql = "UPDATE onlineproducts SET stock = stock + ? WHERE productid = ?";
+      const updateProductSql =
+        "UPDATE onlineproducts SET stock = stock + ? WHERE productid = ?";
       const updateValues = [quantity, productid];
       return query(updateProductSql, updateValues).then(() => {
-        const deleteDetailSql = "DELETE FROM order_details WHERE order_id = ? AND productid = ?";
+        const deleteDetailSql =
+          "DELETE FROM order_details WHERE order_id = ? AND productid = ?";
         const deleteValues = [order_id, productid];
         return query(deleteDetailSql, deleteValues);
       });
@@ -794,21 +805,19 @@ router.delete('/orders/:order_id', userPassport, async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: `訂單已刪除，訂單ID為 ${order_id}`,
+      message: `訂單已刪除，訂單ID為 ${order_id}`
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
 
-
-
 //會員購物車
-router.get('/cart', userPassport, async (req, res) => {
+router.get("/cart", userPassport, async (req, res) => {
   try {
     const user_id = req.user[0].user_id;
     const cart_list = await query(
@@ -819,7 +828,7 @@ router.get('/cart', userPassport, async (req, res) => {
     if (cart_list.length === 0) {
       res.json({
         success: false,
-        message: '購物車內沒有東西',
+        message: "購物車內沒有東西",
         data: []
       });
     } else {
@@ -832,22 +841,19 @@ router.get('/cart', userPassport, async (req, res) => {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '伺服器錯誤'
+      message: "伺服器錯誤"
     });
   }
 });
 
-
-
-router.post('/cart/add', userPassport, async (req, res) => {
+router.post("/cart/add", userPassport, async (req, res) => {
   try {
     const user_id = req.user[0].user_id;
     const { productid, quantity } = req.body;
 
-    let [cart] = await query(
-      'SELECT * FROM shopping_cart WHERE user_id = ?',
-      [user_id]
-    );
+    let [cart] = await query("SELECT * FROM shopping_cart WHERE user_id = ?", [
+      user_id
+    ]);
 
     if (cart) {
       const [cart_product] = await query(
@@ -860,29 +866,31 @@ router.post('/cart/add', userPassport, async (req, res) => {
         [productid]
       );
 
-      const total_quantity = parseInt(quantity) + (cart_product ? parseInt(cart_product.quantity) : 0);
+      const total_quantity =
+        parseInt(quantity) +
+        (cart_product ? parseInt(cart_product.quantity) : 0);
       if (!product) {
         return res.status(400).json({
           success: false,
-          message: '查無此商品'
+          message: "查無此商品"
         });
       }
       if (product.stock < total_quantity) {
         return res.status(400).json({
           success: false,
-          message: '該商品庫存不足'
+          message: "該商品庫存不足"
         });
       }
 
       if (cart_product) {
         await query(
-          'UPDATE shopping_cart SET quantity = quantity + ? WHERE cart_id = ? AND productid = ?',
+          "UPDATE shopping_cart SET quantity = quantity + ? WHERE cart_id = ? AND productid = ?",
           [quantity, cart.cart_id, productid]
         );
       } else {
         const new_cart_id = 100000 + Math.floor(Math.random() * 90000);
         await query(
-          'INSERT INTO shopping_cart (cart_id, productid, quantity,user_id) VALUES (?, ?, ?,?)',
+          "INSERT INTO shopping_cart (cart_id, productid, quantity,user_id) VALUES (?, ?, ?,?)",
           [new_cart_id, productid, quantity, user_id]
         );
       }
@@ -893,44 +901,44 @@ router.post('/cart/add', userPassport, async (req, res) => {
         "SELECT stock FROM onlineproducts WHERE productid = ?",
         [productid]
       );
-      console.log(product)
+      console.log(product);
       if (product.stock < parseInt(quantity)) {
         return res.status(400).json({
           success: false,
-          message: '該商品庫存不足'
+          message: "該商品庫存不足"
         });
       }
 
       await query(
-        'INSERT INTO shopping_cart (user_id, cart_id, productid, quantity) VALUES (?, ?, ?, ?)',
+        "INSERT INTO shopping_cart (user_id, cart_id, productid, quantity) VALUES (?, ?, ?, ?)",
         [user_id, new_cart_id, productid, quantity]
       );
     }
     res.json({
       success: true,
-      message: '商品已添加到購物車'
+      message: "商品已添加到購物車"
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '伺服器錯誤'
+      message: "伺服器錯誤"
     });
   }
 });
 
-router.put('/cart/update', userPassport, async (req, res) => {
+router.put("/cart/update", userPassport, async (req, res) => {
   try {
     const { cart_id, quantity } = req.body;
     // 檢查購物車是否存在
     const [cart] = await query(
-      'SELECT * FROM shopping_cart WHERE cart_id = ? ',
+      "SELECT * FROM shopping_cart WHERE cart_id = ? ",
       [cart_id]
     );
     if (!cart) {
       return res.status(404).json({
         success: false,
-        message: '該購物車不存在'
+        message: "該購物車不存在"
       });
     }
 
@@ -942,94 +950,88 @@ router.put('/cart/update', userPassport, async (req, res) => {
     if (product.stock < quantity) {
       return res.status(400).json({
         success: false,
-        message: '該商品庫存不足'
+        message: "該商品庫存不足"
       });
     }
     if (quantity < 1) {
       return res.status(400).json({
         success: false,
-        message: '商品不得為0'
+        message: "商品不得為0"
       });
     }
 
     // 更新購物車商品數量
-    await query(
-      'UPDATE shopping_cart SET quantity = ?  WHERE cart_id = ?',
-      [quantity, cart_id]
-    );
+    await query("UPDATE shopping_cart SET quantity = ?  WHERE cart_id = ?", [
+      quantity,
+      cart_id
+    ]);
 
     // 返回成功響應
     res.json({
       success: true,
-      message: '購物車更新成功'
+      message: "購物車更新成功"
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '伺服器錯誤'
+      message: "伺服器錯誤"
     });
   }
 });
 
-// 
-router.delete('/cart/:cart_id', userPassport, async (req, res) => {
+//
+router.delete("/cart/:cart_id", userPassport, async (req, res) => {
   try {
     const { cart_id } = req.params;
     const user_id = req.user[0].user_id;
 
     const [cart] = await query(
-      'SELECT * FROM shopping_cart WHERE cart_id = ? AND user_id = ?',
+      "SELECT * FROM shopping_cart WHERE cart_id = ? AND user_id = ?",
       [cart_id, user_id]
     );
-    console.log(user_id)
+    console.log(user_id);
 
     if (!cart) {
       return res.status(404).json({
         success: false,
-        message: '找不到該購物車'
+        message: "找不到該購物車"
       });
     }
 
-    await query(
-      'DELETE FROM shopping_cart WHERE cart_id = ?',
-      [cart_id]
-    );
+    await query("DELETE FROM shopping_cart WHERE cart_id = ?", [cart_id]);
 
     res.json({
       success: true,
-      message: '已刪除'
+      message: "已刪除"
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '伺服器錯誤'
+      message: "伺服器錯誤"
     });
   }
 });
-router.delete('/cart', userPassport, async (req, res) => {
+router.delete("/cart", userPassport, async (req, res) => {
   try {
     const user_id = req.user[0].user_id;
-    await query(
-      "DELETE FROM shopping_cart WHERE user_id = ?",
-      [user_id]
-    );
+    await query("DELETE FROM shopping_cart WHERE user_id = ?", [user_id]);
     res.json({
       success: true,
-      message: '已刪除購物車內所有商品'
+      message: "已刪除購物車內所有商品"
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '伺服器錯誤'
+      message: "伺服器錯誤"
     });
   }
 });
 
 //user favorite
-router.get('/favorite', userPassport, async (req, res) => {
+router.get("/favorite", userPassport, async (req, res) => {
   try {
     const user_id = req.user[0].user_id;
     const favorites = await query(
@@ -1039,10 +1041,9 @@ router.get('/favorite', userPassport, async (req, res) => {
     if (favorites.length === 0) {
       return res.status(404).json({
         success: false,
-        message: '没有追蹤清單'
+        message: "没有追蹤清單"
       });
     }
-
 
     res.json({
       success: true,
@@ -1052,12 +1053,12 @@ router.get('/favorite', userPassport, async (req, res) => {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '伺服器錯誤'
+      message: "伺服器錯誤"
     });
   }
 });
 
-router.post('/favorite', userPassport, async (req, res) => {
+router.post("/favorite", userPassport, async (req, res) => {
   try {
     const { productid } = req.body;
     const user_id = req.user[0].user_id;
@@ -1069,7 +1070,7 @@ router.post('/favorite', userPassport, async (req, res) => {
     if (!product) {
       return res.status(400).json({
         success: false,
-        message: '該商品不存在'
+        message: "該商品不存在"
       });
     }
 
@@ -1081,63 +1082,60 @@ router.post('/favorite', userPassport, async (req, res) => {
     if (favorite) {
       return res.status(400).json({
         success: false,
-        message: '已經加入該商品'
+        message: "已經加入該商品"
       });
     }
 
-    await query(
-      'INSERT INTO favorite (user_id, productid) VALUES (?, ?)',
-      [user_id, productid]
-    );
+    await query("INSERT INTO favorite (user_id, productid) VALUES (?, ?)", [
+      user_id,
+      productid
+    ]);
 
     res.json({
       success: true,
-      message: '商品已添加到我的最愛'
+      message: "商品已添加到我的最愛"
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '伺服器錯誤'
+      message: "伺服器錯誤"
     });
   }
 });
 
-router.delete('/favorite', userPassport, async (req, res) => {
+router.delete("/favorite", userPassport, async (req, res) => {
   try {
     const { productid } = req.body;
     const user_id = req.user[0].user_id;
     const [favorite] = await query(
-      'SELECT * FROM favorite WHERE productid = ? AND user_id = ?',
+      "SELECT * FROM favorite WHERE productid = ? AND user_id = ?",
       [productid, user_id]
     );
 
     if (!favorite) {
       return res.status(404).json({
         success: false,
-        message: '該收藏不存在'
+        message: "該收藏不存在"
       });
     }
-    await query(
-      'DELETE FROM favorite WHERE productid = ? AND user_id = ?',
-      [productid, user_id]
-    );
+    await query("DELETE FROM favorite WHERE productid = ? AND user_id = ?", [
+      productid,
+      user_id
+    ]);
     res.json({
       success: true,
-      message: '已刪除該收藏'
+      message: "已刪除該收藏"
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '伺服器錯誤'
+      message: "伺服器錯誤"
     });
   }
 });
 
 //user coupon
-
-
-
 
 module.exports = router;

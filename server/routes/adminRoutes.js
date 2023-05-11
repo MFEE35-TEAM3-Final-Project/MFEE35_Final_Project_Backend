@@ -95,14 +95,14 @@ router.post("/login", async (req, res) => {
     const checkResults = await query(checkEmailSql, [email]);
     if (checkResults.length === 0) {
       // email不存在
-      return res.json({ success: false, message: "email 不存在" });
+      return res.status(404).json({ success: false, message: "email 不存在" });
     } else {
       const matchAdmin = checkResults[0];
       // 驗證密碼
       const isMatch = await bcrypt.compare(password, matchAdmin.password);
       if (isMatch) {
         // 密碼正確
-        let expDate = Date.now() + 10000 * 60 * 60 * 24;
+        let expDate = Date.now() + 1000 * 60 * 60 * 24 * 7;
         const tokenObj = {
           _id: matchAdmin.admin_id,
           email: matchAdmin.email,
@@ -118,7 +118,7 @@ router.post("/login", async (req, res) => {
         });
       } else {
         // 密碼錯誤
-        return res.json({
+        return res.status(401).json({
           success: false,
           message: `密碼錯誤 ${matchAdmin.adminId}`
         });
