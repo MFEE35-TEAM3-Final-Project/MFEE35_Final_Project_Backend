@@ -9,6 +9,10 @@ const userRoutes = require("./routes/userRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const foodRoutes = require("./routes/foodRoutes");
 const articleRoutes = require("./routes/articleRoutes");
+// 新增
+const productsRoutes = require("./routes/productsRoutes");
+const activityRoutes = require("./routes/activityRoutes");
+const discountRoutes = require("./routes/discountRoutes");
 
 //跨域設定
 app.use(cors());
@@ -21,6 +25,10 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/food", foodRoutes);
 app.use("/api/articles", articleRoutes);
+//新增
+app.use("/api/product", productsRoutes);
+app.use("/api/activity", activityRoutes);
+app.use("/api/discount", discountRoutes);
 
 // 開始監聽
 app.listen(8080, () => {
