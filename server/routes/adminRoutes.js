@@ -102,7 +102,7 @@ router.post("/login", async (req, res) => {
       const isMatch = await bcrypt.compare(password, matchAdmin.password);
       if (isMatch) {
         // 密碼正確
-        let expDate = Date.now() + 1000 * 60 * 60 * 24 * 7;
+        let expDate = Date.now() + 10000 * 60 * 60 * 24;
         const tokenObj = {
           _id: matchAdmin.admin_id,
           email: matchAdmin.email,
@@ -166,16 +166,12 @@ router.post("/article", adminPassport, async (req, res) => {
       });
 
     const adminId = req.user[0].admin_id;
-    const { title, sub_title, category, cover_image, content, is_published } =
-      req.body;
+    const { title, content, is_published } = req.body;
     let articleId = uuidv4();
     const articleData = {
       article_id: articleId,
       admin_id: adminId,
       title: title,
-      sub_title: sub_title,
-      category: category,
-      cover_image: cover_image,
       content: content,
       is_published: is_published
     };
@@ -208,14 +204,10 @@ router.put("/article/:article_id", adminPassport, async (req, res) => {
         message: validError.details[0].message
       });
 
-    const { title, sub_title, category, cover_image, content, is_published } =
-      req.body;
+    const { title, content, is_published } = req.body;
 
     const articleData = {
       title: title,
-      sub_title: sub_title,
-      category: category,
-      cover_image: cover_image,
       content: content,
       is_published: is_published
     };
@@ -493,4 +485,303 @@ router.get("/user_list", adminPassport, async (req, res) => {
     });
   }
 });
+
+//訂單
+
+router.get("/orders", adminPassport, async (req, res) => {
+  try {
+    let getquery = "SELECT * FROM orders WHERE 1=1";
+    const params = [];
+
+    // 如果有產品ID參數，則加上產品ID條件
+    if (req.query.productid) {
+      const productId = req.query.productid;
+      getquery +=
+        " AND order_id IN (SELECT order_id FROM order_details WHERE productid = ?)";
+      params.push(productId);
+    }
+
+    // 如果有狀態參數，則加上狀態條件
+    if (req.query.status) {
+      const status = req.query.status;
+      getquery += " AND status = ?";
+      params.push(status);
+    }
+
+    // 如果有時間範圍參數，則加上時間範圍條件
+    if (req.query.start_date && req.query.end_date) {
+      const startDate = req.query.start_date;
+      const endDate = req.query.end_date;
+      getquery += " AND order_time BETWEEN ? AND ?";
+      params.push(startDate, endDate);
+    }
+
+    // 執行查詢
+    const getOrdersResults = await query(getquery, params);
+
+    if (getOrdersResults.length > 0) {
+      const orderIds = getOrdersResults
+        .map((orders) => `'${orders.order_id}'`)
+        .join(",");
+      const getOrderDetailsSql = `SELECT * FROM order_details WHERE order_id IN (${orderIds})`;
+      const getOrderDetailsResults = await query(getOrderDetailsSql);
+      const orders = getOrdersResults.map((orders) => {
+        orders.order_details = getOrderDetailsResults.filter(
+          (detail) => detail.order_id === orders.order_id
+        );
+        return orders;
+      });
+      res.status(200).json({
+        success: true,
+        data: orders
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "沒有任何符合條件的紀錄"
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "伺服器錯誤"
+    });
+  }
+});
+
+router.put("/orders/:order_id", adminPassport, async (req, res) => {
+  try {
+    const orderId = req.params.order_id;
+    const {
+      user_id,
+      phone,
+      name,
+      coupon_code,
+      total_quantity,
+      total_price,
+      payment_method,
+      shipping_method,
+      shipping_address,
+      ship_store,
+      status
+    } = req.body;
+
+    const updateSql =
+      "UPDATE orders SET user_id = ?, phone = ?, name = ?, coupon_code = ?, total_quantity = ?, total_price = ?, payment_method = ?, shipping_method = ?, shipping_address = ?, ship_store = ?, status = ? WHERE order_id = ?";
+    const params = [
+      user_id,
+      phone,
+      name,
+      coupon_code,
+      total_quantity,
+      total_price,
+      payment_method,
+      shipping_method,
+      shipping_address,
+      ship_store,
+      status,
+      orderId
+    ];
+    const { affectedRows } = await query(updateSql, params);
+
+    if (affectedRows > 0) {
+      res.status(200).json({
+        success: true,
+        message: "已更新訂單"
+      });
+    } else {
+      res.json({
+        success: false,
+        message: "更新訂單失敗"
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "伺服器錯誤"
+    });
+  }
+});
+
+router.delete("/orders/:order_id", adminPassport, async (req, res) => {
+  try {
+    const orderId = req.params.order_id;
+    const deleteOrderSql = "DELETE FROM orders WHERE order_id = ?";
+    const deleteOrderDetailSql = "DELETE FROM order_details WHERE order_id = ?";
+    const { affectedRows: orderRows } = await query(deleteOrderSql, [orderId]);
+    const { affectedRows: orderDetailRows } = await query(
+      deleteOrderDetailSql,
+      [orderId]
+    );
+
+    if (orderRows > 0 && orderDetailRows > 0) {
+      res.status(200).json({
+        success: true,
+        message: "已刪除訂單"
+      });
+    } else {
+      res.json({
+        success: false,
+        message: "刪除訂單失敗"
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "伺服器錯誤"
+    });
+  }
+});
+
+// 優惠券
+router.post("/coupon", adminPassport, async (req, res) => {
+  try {
+    const {
+      code,
+      name,
+      discount_rate,
+      discount_algorithm,
+      description,
+      usage_limit,
+      start_date,
+      end_date
+    } = req.body;
+    const [coupon] = await query("SELECT * FROM coupons WHERE code = ?", [
+      code
+    ]);
+    if (coupon) {
+      return res.status(400).json({
+        success: false,
+        message: "該優惠券代碼已存在"
+      });
+    }
+    await query(
+      "INSERT INTO coupons (code, name, discount_rate, discount_algorithm, description, usage_limit, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        code,
+        name,
+        discount_rate,
+        discount_algorithm,
+        description,
+        usage_limit,
+        start_date,
+        end_date
+      ]
+    );
+    res.json({
+      success: true,
+      message: "新增優惠券成功"
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "發生錯誤，請稍後再試"
+    });
+  }
+});
+
+// GET /coupon
+// 取得所有優惠券列表
+router.get("/coupon", adminPassport, async (req, res) => {
+  try {
+    const coupons = await query("SELECT * FROM coupons");
+    res.json({
+      success: true,
+      data: coupons
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "發生錯誤，請稍後再試"
+    });
+  }
+});
+
+// PUT /coupon/:id
+// 修改指定優惠券
+router.put("/coupon/:coupon_id", adminPassport, async (req, res) => {
+  try {
+    const { coupon_id } = req.params;
+    const {
+      name,
+      discount_rate,
+      discount_algorithm,
+      description,
+      usage_limit,
+      start_date,
+      end_date
+    } = req.body;
+
+    const [coupon] = await query("SELECT * FROM coupons WHERE coupon_id = ?", [
+      coupon_id
+    ]);
+    if (!coupon) {
+      return res.status(404).json({
+        success: false,
+        message: "找不到該優惠券"
+      });
+    }
+
+    await query(
+      "UPDATE coupons SET name=?, discount_rate=?, discount_algorithm=?, description=?, usage_limit=?, start_date=?, end_date=? WHERE coupon_id=?",
+      [
+        name,
+        discount_rate,
+        discount_algorithm,
+        description,
+        usage_limit,
+        start_date,
+        end_date,
+        coupon_id
+      ]
+    );
+
+    res.json({
+      success: true,
+      message: "修改優惠券成功"
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "伺服器錯誤"
+    });
+  }
+});
+
+// 刪除指定優惠券
+router.delete("/coupon/:code", adminPassport, async (req, res) => {
+  try {
+    const { code } = req.params;
+
+    const [coupon] = await query("SELECT * FROM coupons WHERE code = ?", [
+      code
+    ]);
+    if (!coupon) {
+      return res.status(404).json({
+        success: false,
+        message: "找不到該優惠券"
+      });
+    }
+
+    await query("DELETE FROM coupons WHERE code = ?", [code]);
+
+    res.json({
+      success: true,
+      message: "刪除優惠券成功"
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "發生錯誤，請稍後再試"
+    });
+  }
+});
+
 module.exports = router;
