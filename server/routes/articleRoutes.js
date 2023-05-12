@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
 
     // 取得文章
     let getArticlesSql =
-      "SELECT article_id, admin_id, title, is_published, created_at, updated_at FROM articles ";
+      "SELECT article_id, admin_id, title, category, sub_title, is_published, created_at, updated_at FROM articles ";
     let getParams = [];
 
     getArticlesSql += "ORDER BY created_at DESC ";
@@ -39,13 +39,13 @@ router.get("/", async (req, res) => {
       current_page: nowPage,
       per_page: perPage,
       has_pre: nowPage >= 2,
-      has_next: nowPage < totalPages,
+      has_next: nowPage < totalPages
     };
 
     if (getResults.length === 0) {
       return res.status(404).json({
         success: false,
-        message: "沒有符合的資料",
+        message: "沒有符合的資料"
       });
     } else {
       return res.status(200).json({
@@ -53,14 +53,14 @@ router.get("/", async (req, res) => {
         message: "成功取得文章",
         article_count: totalCount,
         articles: getResults,
-        pagination,
+        pagination
       });
     }
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
@@ -75,19 +75,19 @@ router.get("/id=:article_id", async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "成功取得文章",
-        article: getResult,
+        article: getResult
       });
     } else {
       return res.status(404).json({
         success: false,
-        message: "沒有符合的文章",
+        message: "沒有符合的文章"
       });
     }
   } catch {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
@@ -102,19 +102,19 @@ router.get("/article_comments/article_id=:article_id", async (req, res) => {
         success: true,
         article_id: articleId,
         comments_count: getResults.length,
-        comments: getResults,
+        comments: getResults
       });
     } else {
       res.status(404).json({
         success: false,
-        message: "文章沒有留言",
+        message: "文章沒有留言"
       });
     }
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
