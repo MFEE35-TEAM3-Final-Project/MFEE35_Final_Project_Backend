@@ -411,6 +411,7 @@ router.post("/meal_records", userPassport, async (req, res) => {
   }
 });
 
+// 原版
 router.get("/meal_records", userPassport, async (req, res) => {
   try {
     const userId = req.user[0].user_id;
@@ -442,12 +443,12 @@ router.get("/meal_records", userPassport, async (req, res) => {
         saturated_fat: result.saturated_fat,
         sodium: result.sodium,
       },
-      total_weight: result.unit * result.food_qty,
-      total_calories: result.calories * result.food_qty,
-      total_carbohydrate: result.carbohydrate * result.food_qty,
-      total_protein: result.protein * result.food_qty,
-      total_saturated_fat: result.saturated_fat * result.food_qty,
-      total_sodium: result.sodium * result.food_qty,
+      total_weight: Math.floor(result.unit * result.food_qty),
+      total_calories: Math.floor(result.calories * result.food_qty),
+      total_carbohydrate: Math.floor(result.carbohydrate * result.food_qty),
+      total_protein: Math.floor(result.protein * result.food_qty),
+      total_saturated_fat: Math.floor(result.saturated_fat * result.food_qty),
+      total_sodium: Math.floor(result.sodium * result.food_qty),
     }));
 
     if (results.length > 0) {
@@ -471,6 +472,85 @@ router.get("/meal_records", userPassport, async (req, res) => {
     });
   }
 });
+
+// 哲銓魔改
+// router.get("/meal_records/:meal_type", userPassport, async (req, res) => {
+//   try {
+//     const userId = req.user[0].user_id;
+//     const startDate = req.query.start_date;
+//     const endDate = req.query.end_date;
+//     const mealType = req.params.meal_type;
+//     let mealTypeSql = "";
+//     if (mealType === "breakfast") {
+//       mealTypeSql = "meal_type = 'breakfast'";
+//     } else if (mealType === "lunch") {
+//       mealTypeSql = "meal_type = 'lunch'";
+//     } else if (mealType === "dinner") {
+//       mealTypeSql = "meal_type = 'dinner'";
+//     } else if (mealType === "snack") {
+//       mealTypeSql = "meal_type = 'snack'";
+//     } else {
+//       return res.status(400).json({
+//         success: false,
+//         message: "不支援此餐點類型",
+//       });
+//     }
+//     let getSql =
+//       "SELECT record_id, user_id, CONVERT_TZ(meal_date, '+0:00', '+8:00') as meal_date, meal_type, food.food_id, food_qty, sample_name AS name, content_des, unit, Calories_adjusted AS calories, carbohydrate, crude_protein AS protein, saturated_fat, sodium FROM meal_records AS mr INNER JOIN food ON food.food_id = mr.food_id WHERE mr.user_id = ? AND " +
+//       mealTypeSql;
+//     let getParams = [userId];
+//     if (startDate && endDate) {
+//       getSql += " AND meal_date BETWEEN ? AND ? ORDER BY meal_date";
+//       getParams.push(startDate, endDate);
+//     }
+//     const results = await query(getSql, getParams);
+
+//     const formattedResults = results.map((result) => ({
+//       record_id: result.record_id,
+//       user_id: result.user_id,
+//       meal_date: result.meal_date,
+//       meal_type: result.meal_type,
+//       food_qty: result.food_qty,
+//       food_info: {
+//         food_id: result.food_id,
+//         name: result.name,
+//         content_des: result.content_des,
+//         unit: result.unit,
+//         calories: result.calories,
+//         carbohydrate: result.carbohydrate,
+//         protein: result.protein,
+//         saturated_fat: result.saturated_fat,
+//         sodium: result.sodium,
+//       },
+//       total_weight: Math.floor(result.unit * result.food_qty),
+//       total_calories: Math.floor(result.calories * result.food_qty),
+//       total_carbohydrate: Math.floor(result.carbohydrate * result.food_qty),
+//       total_protein: Math.floor(result.protein * result.food_qty),
+//       total_saturated_fat: Math.floor(result.saturated_fat * result.food_qty),
+//       total_sodium: Math.floor(result.sodium * result.food_qty),
+//     }));
+
+//     if (results.length > 0) {
+//       return res.status(200).json({
+//         success: true,
+//         message: "取得紀錄成功",
+//         user_id: userId,
+//         records: formattedResults,
+//       });
+//     } else {
+//       return res.status(404).json({
+//         success: false,
+//         message: "該時間段沒有紀錄",
+//       });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "伺服器錯誤",
+//     });
+//   }
+// });
 
 router.put(
   "/meal_record/record_id=:record_id",

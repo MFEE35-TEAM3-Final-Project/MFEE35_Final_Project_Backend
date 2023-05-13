@@ -58,7 +58,7 @@ router.get("/search", async (req, res) => {
 
     if (getResults.length > 0) {
       const {
-        sampleName,
+        sample_name,
         Calories_adjusted,
         carbohydrate,
         crude_protein,
@@ -68,7 +68,7 @@ router.get("/search", async (req, res) => {
       return res.json({
         success: true,
         message: "已取得特定食物",
-        sampleName: sampleName,
+        sample_name: sample_name,
         Calories_adjusted: Calories_adjusted,
         carbohydrate: carbohydrate,
         crude_protein: crude_protein,
