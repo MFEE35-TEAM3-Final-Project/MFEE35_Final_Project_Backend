@@ -331,7 +331,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES ('4428f229-bed4-4c40-8c1f-73c3d6709402','4152607872','ppppppp@gmail.com','0987654321','John Doe',NULL,3,1500.00,'credit_card',NULL,'No. 123, Main Street, Taipei City','My Store','created','2023-05-11 14:00:18'),('9084c680-e179-4e70-b8da-e43a48b5eb93','4152607872','ppppppp@gmail.com','0987654321','John Doe',NULL,3,1500.00,'credit_card',NULL,'No. 123, Main Street, Taipei City','My Store','created','2023-05-11 14:04:57');
+INSERT INTO `orders` VALUES ('4428f229-bed4-4c40-8c1f-73c3d6709402','4152607872','ppppppp@gmail.com','0987654321','John Doe',NULL,3,1500.00,'credit_card',NULL,'No. 123, Main Street, Taipei City','My Store','unpaid','2023-05-11 14:00:18'),('9084c680-e179-4e70-b8da-e43a48b5eb93','4152607872','ppppppp@gmail.com','0987654321','John Doe',NULL,3,1500.00,'credit_card',NULL,'No. 123, Main Street, Taipei City','My Store','unpaid','2023-05-11 14:04:57');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -408,4 +408,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-11 21:12:28
+-- Dump completed on 2023-05-15  0:35:56
