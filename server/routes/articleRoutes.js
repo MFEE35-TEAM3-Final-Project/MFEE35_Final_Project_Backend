@@ -7,13 +7,17 @@ const query = promisify(connectPool.query).bind(connectPool);
 // 不須驗證的取得文章get
 router.get("/", async (req, res) => {
   try {
-    let { page, per_page } = req.query;
+    const { page, per_page, category } = req.query;
 
     // 確認頁數
     let perPage = parseInt(per_page) || 20;
     let nowPage = parseInt(page) || 1;
     let countSql = "SELECT COUNT(*) AS total_count FROM articles ";
     let countParams = [];
+    if (category) {
+      countSql += "WHERE category = ? ";
+      countParams.push(category);
+    }
 
     const [{ total_count: totalCount }] = await query(countSql, countParams);
     let totalPages = Math.ceil(totalCount / perPage);
@@ -22,9 +26,12 @@ router.get("/", async (req, res) => {
 
     // 取得文章
     let getArticlesSql =
-      "SELECT article_id, admin_id, title, category, sub_title, is_published, created_at, updated_at FROM articles ";
+      "SELECT article_id, admin_id, title, category, sub_title,cover_image,  is_published, created_at, updated_at FROM articles ";
     let getParams = [];
-
+    if (category) {
+      getArticlesSql += "WHERE category = ? ";
+      getParams.push(category);
+    }
     getArticlesSql += "ORDER BY created_at DESC ";
 
     if (!isNaN(nowPage) && nowPage > 0) {
@@ -51,9 +58,37 @@ router.get("/", async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "成功取得文章",
+        category: category,
         article_count: totalCount,
         articles: getResults,
         pagination
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "伺服器錯誤"
+    });
+  }
+});
+
+//取得全部分類
+router.get("/all_categories", async (req, res) => {
+  try {
+    let getAllCategorySql =
+      "SELECT GROUP_CONCAT(DISTINCT category ORDER BY category) as categories FROM articles";
+    getResults = await query(getAllCategorySql);
+    const allCategories = getResults[0].categories.split(",");
+    if (getResults.length > 0) {
+      return res.status(200).json({
+        success: true,
+        categories: allCategories
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "Nothing"
       });
     }
   } catch (err) {
