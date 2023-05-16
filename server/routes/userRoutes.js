@@ -703,9 +703,11 @@ router.get('/orders', userPassport, async (req, res) => {
       const { order_id } = order;
       const getOrderDetailsSql = "SELECT order_details.quantity, order_details.price, onlineproducts.* FROM order_details JOIN onlineproducts ON order_details.productid = onlineproducts.productid WHERE order_id = ?";
       const orderDetails = await query(getOrderDetailsSql, [order_id]);
+      // const getOrderProductDetailsSql = "SELECT  * FROM onlineproducts WHERE productid = ?";
+      // const orderproductDetails = await query(getOrderProductDetailsSql, [order_id.productid]);
       return {
         ...order,
-        order_details: orderDetails,
+        order_details: orderDetails
       };
     });
 
@@ -843,10 +845,9 @@ router.post('/cart/add', userPassport, async (req, res) => {
   try {
     const user_id = req.user[0].user_id;
     const { productid, quantity } = req.body;
-
     let [cart] = await query(
-      'SELECT * FROM shopping_cart WHERE user_id = ?',
-      [user_id]
+      'SELECT * FROM shopping_cart WHERE user_id = ? and productid= ?',
+      [user_id, productid]
     );
 
     if (cart) {
@@ -888,7 +889,6 @@ router.post('/cart/add', userPassport, async (req, res) => {
       }
     } else {
       const new_cart_id = 100000 + Math.floor(Math.random() * 90000);
-
       const [product] = await query(
         "SELECT stock FROM onlineproducts WHERE productid = ?",
         [productid]
@@ -918,6 +918,7 @@ router.post('/cart/add', userPassport, async (req, res) => {
     });
   }
 });
+
 
 router.put('/cart/update', userPassport, async (req, res) => {
   try {

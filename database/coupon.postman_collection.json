@@ -1,0 +1,236 @@
+{
+	"info": {
+		"_postman_id": "2f1c6986-57de-4a17-8f92-c012c13703bf",
+		"name": "coupon",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "coupon admin post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n  \"code\": \"ABC123\",\r\n  \"name\": \"特惠日優惠券\",\r\n  \"discount_rate\": 0.8,\r\n  \"discount_algorithm\": \"percentage\",\r\n  \"description\": \"特惠日優惠券，享有八折優惠\",\r\n  \"usage_limit\": 1000,\r\n  \"start_date\": \"2022-06-01 00:00:00\",\r\n  \"end_date\": \"2022-06-30 23:59:59\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/coupon",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"coupon"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coupon admin post Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n  \"code\": \"ABC123\",\r\n  \"name\": \"特惠日優惠券\",\r\n  \"discount_rate\": 0.8,\r\n  \"discount_algorithm\": \"percentage\",\r\n  \"description\": \"特惠日優惠券，享有八折優惠\",\r\n  \"usage_limit\": 1000,\r\n  \"start_date\": \"2022-06-01 00:00:00\",\r\n  \"end_date\": \"2022-06-30 23:59:59\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/coupon",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"coupon"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coupon admin put",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"特惠日優惠券 - 6月版\",\r\n  \"discount_rate\": 0.7,\r\n  \"discount_algorithm\": \"percentage\",\r\n  \"description\": \"特惠日優惠券，享有七折優惠\",\r\n  \"usage_limit\": 1,\r\n  \"start_date\": \"2022-06-01 00:00:00\",\r\n  \"end_date\": \"2022-06-30 23:59:59\"\r\n}\r\n\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/coupon/:code",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"coupon",
+						":code"
+					],
+					"variable": [
+						{
+							"key": "code",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coupon admin get",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"特惠日優惠券 - 6月版\",\r\n  \"discount_rate\": 0.7,\r\n  \"discount_algorithm\": \"percentage\",\r\n  \"description\": \"特惠日優惠券，享有七折優惠\",\r\n  \"usage_limit\": 2000,\r\n  \"start_date\": \"2022-06-01 00:00:00\",\r\n  \"end_date\": \"2022-06-30 23:59:59\"\r\n}\r\n\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/coupon",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"coupon"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coupon use",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\":\"ABC123\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/coupon/use",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"coupon",
+						"use"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coupon admin del",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/coupon/:code",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"coupon",
+						":code"
+					],
+					"variable": [
+						{
+							"key": "code",
+							"value": "TESTCODE"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

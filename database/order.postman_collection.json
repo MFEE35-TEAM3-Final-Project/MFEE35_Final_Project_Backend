@@ -1,0 +1,349 @@
+{
+	"info": {
+		"_postman_id": "38109a38-a99f-4c1a-b608-343acafd4d10",
+		"name": "order",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "order admin get all",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIyMTk0OTYxNTA0IiwiZW1haWwiOiJBQUFBQUF4c3hzeHN4c3hzeHN4c3MyQHRlc3QuY29tIiwiZXhwIjoxNjkyMjYwNjM5NzE0LCJpYXQiOjE2ODM2MjA2Mzl9.Vtwmmv2E1JbHTYTaCD26qJvbcO65POrmMqPmO1AiSJ8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/admin/orders",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order admin get query",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admin}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/admin/orders?status=shipping&product_id=23",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"orders"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "shipping"
+						},
+						{
+							"key": "start",
+							"value": "2023-04-01",
+							"disabled": true
+						},
+						{
+							"key": "end",
+							"value": "2023-05-05",
+							"disabled": true
+						},
+						{
+							"key": "product_id",
+							"value": "23"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order admin put",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"user_id\": \"user123\",\r\n  \"phone\": \"0912345678\",\r\n  \"name\": \"王大明\",\r\n  \"coupon_code\": null,\r\n  \"total_quantity\": 5,\r\n  \"total_price\": 1000,\r\n  \"payment_method\": \"credit card\",\r\n  \"shipping_method\": \"home delivery\",\r\n  \"shipping_address\": \"台北市中正區\",\r\n  \"ship_store\": \"711\",\r\n  \"status\": \"shipped\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/orders/:order_id",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"orders",
+						":order_id"
+					],
+					"variable": [
+						{
+							"key": "order_id",
+							"value": "1b7dceac-715a-4ead-b43e-420a7c7032ff"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order admin del",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admin}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/orders/:order_id",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"orders",
+						":order_id"
+					],
+					"variable": [
+						{
+							"key": "order_id",
+							"value": "1a6d5acb-1899-466e-8fc1-4c324d19d0d6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order user post",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"user_id\": \"4152607872\",\r\n  \"phone\": \"0987654321\",\r\n  \"name\": \"John Doe\",\r\n  \"email\": \"ppppppp@gmail.com\",\r\n  \"coupon_code\": \"TESTCODE\",\r\n  \"total_quantity\": 3,\r\n  \"total_price\": 1500,\r\n  \"payment_method\": \"credit_card\",\r\n  \"shipping_address\": \"No. 123, Main Street, Taipei City\",\r\n  \"ship_store\": \"My Store\",\r\n  \"order_details\": [\r\n    {\r\n      \"productid\": \"04b15522-6e0a-448a-86fe-6f2da58da30f\",\r\n      \"quantity\": 2,\r\n      \"price\": 500\r\n    },\r\n    {\r\n      \"productid\": \"0861bb46-c0b8-45c9-9b55-c53e812547de\",\r\n      \"quantity\": 1,\r\n      \"price\": 500\r\n    }\r\n  ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/orders",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order user del",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\":\"4152607872\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/orders/:order_id",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"orders",
+						":order_id"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "order_id",
+							"value": "7c9b1e6c-5efd-4d19-a93f-7d6792678313"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order user get",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\":\"4152607872\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/orders?status=create",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"orders"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "create"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "orders serach get",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/orders/search?order_id=fd1b1b09-a58c-42ee-ab83-c3442ca5113e",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"orders",
+						"search"
+					],
+					"query": [
+						{
+							"key": "order_id",
+							"value": "fd1b1b09-a58c-42ee-ab83-c3442ca5113e"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "admin",
+			"value": ""
+		}
+	]
+}

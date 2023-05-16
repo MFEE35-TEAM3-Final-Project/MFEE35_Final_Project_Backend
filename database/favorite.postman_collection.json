@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "eb00249d-ce07-456c-af4a-ef9934f8c22a",
+		"name": "favorite",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "favorite post",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIyMTk0OTYxNTA0IiwiZW1haWwiOiJBQUFBQUF4c3hzeHN4c3hzeHN4c3MyQHRlc3QuY29tIiwiZXhwIjoxNjkyNzU5OTQzNDMwLCJpYXQiOjE2ODQxMTk5NDN9.tWEDbbAN_aUBiYWIHMfG0yidz64mnX2uqEfGTg0IMjI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productid\":\"09f437e8-169e-4dc0-80c1-f222b3719009\"\r\n    // \"productid\":\"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/favorite",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"favorite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "favorite delete",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\":\"4152607872\",\r\n    \"product_id\":\"5\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/favorite/:product_id",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"favorite",
+						":product_id"
+					],
+					"variable": [
+						{
+							"key": "product_id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "favorite get",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{user}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/favorite",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"favorite"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
