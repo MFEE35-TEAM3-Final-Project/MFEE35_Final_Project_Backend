@@ -60,8 +60,8 @@ const articleValid = (data) => {
   const schema = Joi.object({
     title: Joi.string().max(45).empty("").required(),
     sub_title: Joi.string().max(100).empty(""),
-    cover_image: Joi.string().max(255).empty(""),
     category: Joi.string().max(45).required(),
+    cover_image: Joi.string().max(255).empty(""),
     content: Joi.string()
       .pattern(/<("[^"]*"|'[^']*'|[^'">])*>/)
       .empty(""),
