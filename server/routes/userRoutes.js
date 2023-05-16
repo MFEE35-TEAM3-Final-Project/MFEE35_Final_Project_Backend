@@ -154,12 +154,16 @@ router.post("/login", async (req, res) => {
 router.post(
   "/check",
   userPassport,
-  (req, res) => {
-    console.log("anything come this OK fn");
+  async (req, res) => {
+    // const userId = req.user[0].user_id;
+    // const getSql =
+    //   "SELECT user_id, email, username, avatar, gender, birthday, phone, address, created_at, updated_at FROM users WHERE user_id = ? ";
+    // const getResults = await query(getSql, [userId]);
+
     return res.status(200).json({
       success: true,
       message: "已認證 Token",
-      user: req.user
+      user: req.user[0]
     });
   },
   (err, req, res, next) => {
