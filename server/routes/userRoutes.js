@@ -35,7 +35,16 @@ router.post("/register", async (req, res) => {
         message: validError.details[0].message
       });
 
-    const { email, password, username, phone, address } = req.body;
+    const {
+      email,
+      password,
+      username,
+      avatar,
+      gender,
+      birthday,
+      phone,
+      address
+    } = req.body;
 
     // 檢查email是否已經存在
     const checkEmailSql = "SELECT COUNT(*) AS count FROM users WHERE email = ?";
@@ -50,7 +59,7 @@ router.post("/register", async (req, res) => {
       // 密碼加密
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
-
+      const filterAvatar = xss(avatar);
       // 新增使用者
       let userId = Math.floor(1000000000 + Math.random() * 9000000000);
       const userData = {
@@ -58,6 +67,9 @@ router.post("/register", async (req, res) => {
         email,
         password: hashedPassword,
         username,
+        avatar: filterAvatar,
+        gender,
+        birthday,
         phone,
         address
       };

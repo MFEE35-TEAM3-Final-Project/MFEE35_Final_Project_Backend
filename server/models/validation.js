@@ -6,9 +6,14 @@ const registerValidation = (data) => {
     email: Joi.string().min(6).max(50).required().email(),
     password: Joi.string().min(6).max(255).required(),
     repeat_password: Joi.ref("password"),
-    username: Joi.string().max(30),
-    phone: Joi.string().pattern(/^\d{9,10}$/),
-    address: Joi.string().max(100, "utf8")
+    username: Joi.string().max(30).empty(""),
+    avatar: Joi.string().max(255).empty(""),
+    gender: Joi.string().valid("female", "male"),
+    birthday: Joi.date().empty(""),
+    phone: Joi.string()
+      .pattern(/^\d{9,10}$/)
+      .empty(""),
+    address: Joi.string().max(100, "utf8").empty("")
   });
 
   return userSchema.validate(data);
