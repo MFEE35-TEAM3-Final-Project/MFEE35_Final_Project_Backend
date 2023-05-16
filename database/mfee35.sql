@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: betadays
+-- Host: 127.0.0.1    Database: mfee35
 -- ------------------------------------------------------
--- Server version	8.0.33
+-- Server version	8.0.32
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -61,7 +61,7 @@ CREATE TABLE `admins` (
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`sid`),
   UNIQUE KEY `adminId_UNIQUE` (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `admins` (
 
 LOCK TABLES `admins` WRITE;
 /*!40000 ALTER TABLE `admins` DISABLE KEYS */;
-INSERT INTO `admins` VALUES (1,3450349941,'Uikdiiioek','$2a$10$fXFZncA9bAE4JlxnaAr5sOOWfWx7hztOVjEhAfgL4Mkyb2Uj0aiKu','sssssss@glkajl.com','2023-04-10 06:18:00'),(2,1606116619,'Uikdiiioek','$2a$10$OtcEZSpSyeziXNf3TXgxYers74E74dhex.sbHWBod5FgKdYqFaJya','sssss545ss@glkajl.com','2023-04-10 06:18:26'),(3,7606591757,'CommonUse','$2a$10$U6iYfrrmnLbAQXg0Pjxyre9d1Zn5svaLssspNHfGdtR9pBnVNorqa','banana0583@fruitz.com','2023-04-10 07:26:33'),(4,4500310002,'CommonUse','$2a$10$AuGNxUbFN6Bi2Ra5lCOd5eBYdxLYURu6OaKQoJjZOQNo1pCzFD83K','banana058343@fruitz.com','2023-04-10 07:43:25'),(5,7427953964,'arimakana','$2a$10$0Vy5k88wPcwKZLzNnBMxY.o.xOHuUyQXM5u4HuSuGO5jMIChEYule','arimakana17@oshi.com','2023-04-23 05:01:56'),(6,6691530706,'hoshinoruby','$2a$10$QFiDv5amiH0z9NFeJpK2t.6Y0S87aj2TQQBS.d0kSctAc9FvAiSAC','hoshinoai556@oshi.com','2023-04-28 06:33:16'),(7,1726203583,'aquamarine','$2a$10$.jUNis705eGAD3hE8zrXOOa3O97D0Xs5EBz.gRgYzSP5eCyAsq7/.','ai44510@oshi.com','2023-05-16 07:31:41');
+INSERT INTO `admins` VALUES (1,3450349941,'Uikdiiioek','$2a$10$fXFZncA9bAE4JlxnaAr5sOOWfWx7hztOVjEhAfgL4Mkyb2Uj0aiKu','sssssss@glkajl.com','2023-04-10 06:18:00'),(2,1606116619,'Uikdiiioek','$2a$10$OtcEZSpSyeziXNf3TXgxYers74E74dhex.sbHWBod5FgKdYqFaJya','sssss545ss@glkajl.com','2023-04-10 06:18:26'),(3,7606591757,'CommonUse','$2a$10$U6iYfrrmnLbAQXg0Pjxyre9d1Zn5svaLssspNHfGdtR9pBnVNorqa','banana0583@fruitz.com','2023-04-10 07:26:33'),(4,4500310002,'CommonUse','$2a$10$AuGNxUbFN6Bi2Ra5lCOd5eBYdxLYURu6OaKQoJjZOQNo1pCzFD83K','banana058343@fruitz.com','2023-04-10 07:43:25'),(5,7427953964,'arimakana','$2a$10$0Vy5k88wPcwKZLzNnBMxY.o.xOHuUyQXM5u4HuSuGO5jMIChEYule','arimakana17@oshi.com','2023-04-23 05:01:56'),(6,6691530706,'hoshinoruby','$2a$10$QFiDv5amiH0z9NFeJpK2t.6Y0S87aj2TQQBS.d0kSctAc9FvAiSAC','hoshinoai556@oshi.com','2023-04-28 06:33:16'),(7,1726203583,'aquamarine','$2a$10$.jUNis705eGAD3hE8zrXOOa3O97D0Xs5EBz.gRgYzSP5eCyAsq7/.','ai44510@oshi.com','2023-05-16 07:31:41'),(8,3617560625,'aquamarine','$2a$10$KjUDuRa1jTo9mPpaRS6DP./B/1DPRuYGlr/pf7hivbKF/HTS4qeaq','mongo87@fruit.com','2023-05-16 10:58:57');
 /*!40000 ALTER TABLE `admins` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -476,7 +476,7 @@ CREATE TABLE `users` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`sid`),
   UNIQUE KEY `userId_UNIQUE` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -485,7 +485,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'5590613616','lskfsl@lkfjl','lsdkfj2313',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 13:11:54','2023-05-11 07:51:07'),(2,'5624963453','lskfsdsfsl@lkfjl','lsdkfj2313',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 13:13:33','2023-05-11 07:51:07'),(3,'3162557974','lskfsdddsfsl@lkfjl','lsdkfj2313',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 13:14:26','2023-05-11 07:51:07'),(4,'3262222356','noraisin@toko.com','Ab123456',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 16:25:59','2023-05-11 07:51:07'),(5,'9960669470','banana0583@fruitz.com','$2a$10$nm9ukuCK87l/lTfThxjZwO6dc5N6qMr2zMOEFX4mQEDzrecEYNE.m',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-06 03:32:16','2023-05-11 07:51:07'),(6,'7400633609','watermelon3325@furuz.com','$2a$10$5uErJ8X7mDAj6kgkDQMCPOq8n/9e/MNICg3eijyeLLXVvONARMHHK',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-06 03:52:28','2023-05-11 07:51:07'),(7,'5453336177','Alon1131@guik.com','$2a$10$ydNBGUsdd6xgT4w8o7WiFeUzls2fTXExtBxNXyX6juJGo.yvAf0Y.',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-10 06:20:24','2023-05-11 07:51:07'),(8,'6076469144','uuid12333@llakke.com','$2a$10$UaHI92cuz925g3Secvypreg/EbC4nhvYWA32cXTiP7DL17KiKXINC','uejj558',NULL,'female','1995-05-20',NULL,NULL,'2023-04-19 03:28:45','2023-05-11 07:51:07'),(9,'9731103331','AAAAABBB@gmail.com','$2a$10$rwKg160ycTIyD/LlqqL3DOK0i0cAJXwa7tQQ0s.ZmdDxuq6E0OSqy','sldkfjsl645454',NULL,'female','1995-05-20',NULL,NULL,'2023-04-28 03:29:56','2023-05-11 07:51:07'),(10,'6818255871','AAAAAAAeeeel@gmail.com','$2a$10$J1aGBYqcJlHO0pBvA/KXsOZm6/aTLq.bulQ/jVRYvnbTfT1pULuX6','test2',NULL,'female','1995-05-20',NULL,NULL,'2023-04-29 07:36:36','2023-05-11 07:51:07'),(11,'6599534247','kkdkllek@gmail.com','$2a$10$HxNwU0hW0ywiOFkywvXonuf6jBk9YOmD7xws41TGZLzeL1Em0JBz.','test0516-1','','male','2000-02-29','','','2023-05-16 03:47:33','2023-05-16 03:47:33'),(12,'6826965306','takoyaki56@gmail.com','$2a$10$iap7nXj3uCW.Xg.9b5LBTeONW8fVpdnrLljpnw3bcyZ8BXMlBROIS','takoyaki56','https://imgur.com/4TuQJDn.jpg','male','2000-02-29','0988775566','林公司的地址','2023-05-16 03:50:59','2023-05-16 03:50:59');
+INSERT INTO `users` VALUES (1,'5590613616','lskfsl@lkfjl','lsdkfj2313',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 13:11:54','2023-05-11 07:51:07'),(2,'5624963453','lskfsdsfsl@lkfjl','lsdkfj2313',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 13:13:33','2023-05-11 07:51:07'),(3,'3162557974','lskfsdddsfsl@lkfjl','lsdkfj2313',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 13:14:26','2023-05-11 07:51:07'),(4,'3262222356','noraisin@toko.com','Ab123456',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 16:25:59','2023-05-11 07:51:07'),(5,'9960669470','banana0583@fruitz.com','$2a$10$nm9ukuCK87l/lTfThxjZwO6dc5N6qMr2zMOEFX4mQEDzrecEYNE.m',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-06 03:32:16','2023-05-11 07:51:07'),(6,'7400633609','watermelon3325@furuz.com','$2a$10$5uErJ8X7mDAj6kgkDQMCPOq8n/9e/MNICg3eijyeLLXVvONARMHHK',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-06 03:52:28','2023-05-11 07:51:07'),(7,'5453336177','Alon1131@guik.com','$2a$10$ydNBGUsdd6xgT4w8o7WiFeUzls2fTXExtBxNXyX6juJGo.yvAf0Y.',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-10 06:20:24','2023-05-11 07:51:07'),(8,'6076469144','uuid12333@llakke.com','$2a$10$UaHI92cuz925g3Secvypreg/EbC4nhvYWA32cXTiP7DL17KiKXINC','uejj558',NULL,'female','1995-05-20',NULL,NULL,'2023-04-19 03:28:45','2023-05-11 07:51:07'),(9,'9731103331','AAAAABBB@gmail.com','$2a$10$rwKg160ycTIyD/LlqqL3DOK0i0cAJXwa7tQQ0s.ZmdDxuq6E0OSqy','sldkfjsl645454',NULL,'female','1995-05-20',NULL,NULL,'2023-04-28 03:29:56','2023-05-11 07:51:07'),(10,'6818255871','AAAAAAAeeeel@gmail.com','$2a$10$J1aGBYqcJlHO0pBvA/KXsOZm6/aTLq.bulQ/jVRYvnbTfT1pULuX6','test2',NULL,'female','1995-05-20',NULL,NULL,'2023-04-29 07:36:36','2023-05-11 07:51:07'),(11,'6599534247','kkdkllek@gmail.com','$2a$10$HxNwU0hW0ywiOFkywvXonuf6jBk9YOmD7xws41TGZLzeL1Em0JBz.','test0516-1','','male','2000-02-29','','','2023-05-16 03:47:33','2023-05-16 03:47:33'),(12,'6826965306','takoyaki56@gmail.com','$2a$10$iap7nXj3uCW.Xg.9b5LBTeONW8fVpdnrLljpnw3bcyZ8BXMlBROIS','takoyaki56','https://imgur.com/4TuQJDn.jpg','male','2000-02-29','0988775566','林公司的地址','2023-05-16 03:50:59','2023-05-16 03:50:59'),(13,'7271242354','test0516@test.com','$2a$10$GJM5RYuJyuJ5N8OEEkxBKunbJSTFsm/ELa4uppb2LHyRqTRhh92p6','takoyaki56','https://imgur.com/4TuQJDn.jpg','male','2000-02-29','0988775566','林公司的地址','2023-05-16 10:55:15','2023-05-16 10:55:15');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -498,4 +498,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-16 16:39:27
+-- Dump completed on 2023-05-16 19:01:20
