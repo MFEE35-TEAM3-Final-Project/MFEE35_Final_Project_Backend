@@ -11,28 +11,51 @@ router.use((req, res, next) => {
 });
 
 // 根據 產品id來進行分類,若沒有帶初值為提取全部的產品
+// router.get("/getProductsById", async (req, res) => {
+//   try {
+//     const { productId } = req.query || "";
+//     if (productId === "") {
+//       const sql = "SELECT * FROM onlineProducts";
+//       const results = await query(sql);
+//       results.forEach((product) => {
+//         product.image = product.image
+//           .split(",")
+//           .filter((img) => img.trim() !== "");
+//       });
+//       return res.json(results);
+//     } else {
+//       const sql = "SELECT * FROM onlineProducts WHERE productId = ?";
+//       const results = await query(sql, [productId]);
+//       results.forEach((product) => {
+//         product.image = product.image
+//           .split(",")
+//           .filter((img) => img.trim() !== "");
+//       });
+//       return res.json(results);
+//     }
+//   } catch (err) {
+//     console.error(err);
+//     return res.sendStatus(500);
+//   }
+// });
 router.get("/getProductsById", async (req, res) => {
   try {
     const { productId } = req.query || "";
+    let sql;
     if (productId === "") {
-      const sql = "SELECT * FROM onlineProducts";
-      const results = await query(sql);
-      results.forEach((product) => {
-        product.image = product.image
-          .split(",")
-          .filter((img) => img.trim() !== "");
-      });
-      return res.json(results);
+      sql =
+        "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId";
     } else {
-      const sql = "SELECT * FROM onlineProducts WHERE productId = ?";
-      const results = await query(sql, [productId]);
-      results.forEach((product) => {
-        product.image = product.image
-          .split(",")
-          .filter((img) => img.trim() !== "");
-      });
-      return res.json(results);
+      sql =
+        "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId WHERE onlineProducts.productId = ?";
     }
+    const results = await query(sql, [productId]);
+    results.forEach((product) => {
+      product.image = product.image
+        .split(",")
+        .filter((img) => img.trim() !== "");
+    });
+    return res.json(results);
   } catch (err) {
     console.error(err);
     return res.sendStatus(500);
