@@ -23,19 +23,19 @@ router.get("/category=:category", async (req, res) => {
       const allCategories = getResults[0].categories.split(",");
       return res.status(200).json({
         success: true,
-        categories: allCategories,
+        categories: allCategories
       });
     } else if (category !== "") {
       let getAllCategorySql = "SELECT * FROM food WHERE Category= ?";
       getResults = await query(getAllCategorySql, [category]);
       return res.status(200).json({
         success: true,
-        results: getResults,
+        results: getResults
       });
     } else {
       return res.status(404).json({
         success: false,
-        message: "Nothing",
+        message: "Nothing"
       });
     }
   } catch (err) {
@@ -57,15 +57,33 @@ router.get("/search", async (req, res) => {
     getResults = await query(searchSql, [foodId]);
 
     if (getResults.length > 0) {
+      const {
+        sample_name,
+        Calories_adjusted,
+        carbohydrate,
+        crude_protein,
+        crude_fat,
+        sodium
+      } = getResults[0];
       return res.json({
         success: true,
         message: "已取得特定食物",
-        food_info: getResults[0],
+        sample_name: sample_name,
+        Calories_adjusted: Calories_adjusted,
+        carbohydrate: carbohydrate,
+        crude_protein: crude_protein,
+        crude_fat: crude_fat,
+        sodium: sodium
       });
+      // return res.json({
+      //   success: true,
+      //   message: "已取得特定食物",
+      //   food_info: getResults[0],
+      // });
     } else {
-      return res.status(404).json({
+      return res.json({
         success: false,
-        message: "找不到該食物",
+        message: "找不到該食物"
       });
     }
   }
@@ -83,12 +101,12 @@ router.get("/search", async (req, res) => {
       message: "search~~",
       category: searchCategory,
       keyword: searchKeyword,
-      suggestions: getResults,
+      suggestions: getResults
     });
   } else {
     return res.status(404).json({
       success: false,
-      message: "Nothing",
+      message: "Nothing"
     });
   }
 });

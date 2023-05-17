@@ -6,12 +6,13 @@ const query = promisify(connectPool.query).bind(connectPool);
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const xss = require("xss");
 const { json } = require("express");
 const {
   adminRegValidation,
   adminLoginValidation,
   articleValid,
-  foodValid,
+  foodValid
 } = require("../models/validation");
 const { adminPassport } = require("../models/passport");
 
@@ -30,7 +31,7 @@ router.post("/register", async (req, res) => {
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
 
     const { adminname, password, email } = req.body;
@@ -56,7 +57,7 @@ router.post("/register", async (req, res) => {
         admin_id: adminId,
         adminname,
         password: hashedPassword,
-        email,
+        email
       };
       let insertSql = "INSERT INTO admins SET ?";
       const result = await query(insertSql, adminData);
@@ -65,7 +66,7 @@ router.post("/register", async (req, res) => {
         res.status(201).json({
           success: true,
           message: `管理員資料新增 ${result.affectedRows}筆 成功 ${result.insertId}`,
-          admin_id: adminId,
+          admin_id: adminId
         });
       } else {
         res.json({ success: false, message: "無法新增管理員資料" });
@@ -85,7 +86,7 @@ router.post("/login", async (req, res) => {
     if (validError) {
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
     }
 
@@ -95,18 +96,18 @@ router.post("/login", async (req, res) => {
     const checkResults = await query(checkEmailSql, [email]);
     if (checkResults.length === 0) {
       // email不存在
-      return res.json({ success: false, message: "email 不存在" });
+      return res.status(404).json({ success: false, message: "email 不存在" });
     } else {
       const matchAdmin = checkResults[0];
       // 驗證密碼
       const isMatch = await bcrypt.compare(password, matchAdmin.password);
       if (isMatch) {
         // 密碼正確
-        let expDate = Date.now() + 10000 * 60 * 60 * 24;
+        let expDate = Date.now() + 1000 * 60 * 60 * 24 * 7;
         const tokenObj = {
           _id: matchAdmin.admin_id,
           email: matchAdmin.email,
-          exp: expDate,
+          exp: expDate
         };
         let token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
         return res.status(200).send({
@@ -114,13 +115,13 @@ router.post("/login", async (req, res) => {
           message: `管理員登入成功 `,
           admin_id: matchAdmin.admin_id,
           token: "JWT " + token,
-          exp: expDate,
+          exp: expDate
         });
       } else {
         // 密碼錯誤
-        return res.json({
+        return res.status(401).json({
           success: false,
-          message: `密碼錯誤 ${matchAdmin.adminId}`,
+          message: `密碼錯誤 ${matchAdmin.adminId}`
         });
       }
     }
@@ -128,7 +129,7 @@ router.post("/login", async (req, res) => {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
@@ -142,14 +143,14 @@ router.post(
     return res.status(200).json({
       success: true,
       message: "已認證 Token",
-      admin: req.user[0],
+      admin: req.user[0]
     });
   },
   (err, req, res, next) => {
     if (err) {
       return res.json({
         success: false,
-        message: "Token 錯誤，請重新登入",
+        message: "Token 錯誤，請重新登入"
       });
     }
   }
@@ -162,18 +163,24 @@ router.post("/article", adminPassport, async (req, res) => {
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
 
     const adminId = req.user[0].admin_id;
-    const { title, content, is_published } = req.body;
+    const { title, sub_title, category, cover_image, content, is_published } =
+      req.body;
+    const fCover = xss(cover_image);
+    const filterContent = xss(content);
     let articleId = uuidv4();
     const articleData = {
       article_id: articleId,
       admin_id: adminId,
       title: title,
-      content: content,
-      is_published: is_published,
+      sub_title,
+      category,
+      cover_image: fCover,
+      content: filterContent,
+      is_published: is_published
     };
     const postArticleSql = "INSERT INTO articles SET ?";
     const postResult = await query(postArticleSql, articleData);
@@ -183,7 +190,7 @@ router.post("/article", adminPassport, async (req, res) => {
         success: true,
         message: "成功送出文章",
         admin_id: adminId,
-        article_id: articleId,
+        article_id: articleId
       });
     } else {
       res.json({ success: false, message: "無法新增文章" });
@@ -201,71 +208,68 @@ router.put("/article/:article_id", adminPassport, async (req, res) => {
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
-
-    const { title, content, is_published } = req.body;
-
+    const { title, sub_title, category, cover_image, content, is_published } =
+      req.body;
+    const fCover = xss(cover_image);
+    const filterContent = xss(content);
     const articleData = {
+      admin_id: adminId,
       title: title,
-      content: content,
-      is_published: is_published,
+      sub_title,
+      category,
+      cover_image: fCover,
+      content: filterContent,
+      is_published: is_published
     };
 
-    const updateSql =
-      "UPDATE articles SET ? WHERE admin_id = ? AND article_id = ? ";
-
-    const updateResult = await query(updateSql, [
-      articleData,
-      adminId,
-      articleId,
-    ]);
+    const updateSql = "UPDATE articles SET ? WHERE article_id = ? ";
+    const updateResult = await query(updateSql, [articleData, articleId]);
     const affectedRows = updateResult.affectedRows;
     if (affectedRows >= 1) {
       res.status(201).json({
         success: true,
         message: "文章編輯成功",
         admin_id: adminId,
-        article_id: articleId,
+        article_id: articleId
       });
     } else {
       res.json({
         success: false,
-        message: "文章編輯失敗",
+        message: "文章編輯失敗、找不到文章、編輯人不對"
       });
     }
   } catch {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
 
 router.delete("/article/:article_id", adminPassport, async (req, res) => {
   try {
-    const adminId = req.user[0].admin_id;
     const { article_id: articleId } = req.params;
-    const delSql =
-      "DELETE FROM articles WHERE admin_id = ? AND article_id = ? ";
-    const { affectedRows } = await query(delSql, [adminId, articleId]);
+    const delSql = "DELETE FROM articles WHERE article_id = ? ";
+    const { affectedRows } = await query(delSql, [articleId]);
     if (affectedRows >= 1) {
       res.status(201).json({
         success: true,
-        message: "已刪除文章",
+        message: "已刪除文章"
       });
     } else {
       res.json({
         success: false,
-        message: "找不到文章",
+        message: "找不到文章"
       });
     }
   } catch {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
@@ -277,7 +281,7 @@ router.post("/food", adminPassport, async (req, res) => {
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
     const {
       category,
@@ -295,7 +299,7 @@ router.post("/food", adminPassport, async (req, res) => {
       carbohydrate,
       sodium,
       dietary_fiber,
-      trans_fat,
+      trans_fat
     } = req.body;
     let foodId = uuidv4();
     const foodData = {
@@ -315,7 +319,7 @@ router.post("/food", adminPassport, async (req, res) => {
       carbohydrate,
       sodium,
       dietary_fiber,
-      trans_fat,
+      trans_fat
     };
     const postSql = "INSERT INTO food SET ?";
     const { affectedRows } = await query(postSql, foodData);
@@ -323,20 +327,20 @@ router.post("/food", adminPassport, async (req, res) => {
       res.status(201).json({
         success: true,
         message: "已新增食物",
-        food_name: sample_name,
+        food_name: sample_name
       });
     } else {
       res.json({
         success: false,
         message: "新增食物失敗",
-        food_name: sample_name,
+        food_name: sample_name
       });
     }
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
@@ -347,7 +351,7 @@ router.put("/food/food_id=:food_id", adminPassport, async (req, res) => {
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message,
+        message: validError.details[0].message
       });
     const {
       category,
@@ -365,7 +369,7 @@ router.put("/food/food_id=:food_id", adminPassport, async (req, res) => {
       carbohydrate,
       sodium,
       dietary_fiber,
-      trans_fat,
+      trans_fat
     } = req.body;
 
     const foodData = {
@@ -385,7 +389,7 @@ router.put("/food/food_id=:food_id", adminPassport, async (req, res) => {
       carbohydrate,
       sodium,
       dietary_fiber,
-      trans_fat,
+      trans_fat
     };
     const updateSql = "UPDATE food SET ? WHERE food_id = ?";
     const { affectedRows } = await query(updateSql, [foodData, foodId]);
@@ -393,19 +397,19 @@ router.put("/food/food_id=:food_id", adminPassport, async (req, res) => {
       res.status(200).json({
         success: true,
         message: "已更新食物資訊",
-        food_name: sample_name,
+        food_name: sample_name
       });
     } else {
       res.json({
         success: false,
-        message: "更新食物資訊失敗",
+        message: "更新食物資訊失敗"
       });
     }
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
@@ -418,42 +422,129 @@ router.delete("/food/food_id=:food_id", adminPassport, async (req, res) => {
     if (affectedRows >= 1) {
       res.status(201).json({
         success: true,
-        message: "已刪除食物資訊",
+        message: "已刪除食物資訊"
       });
     } else {
       res.json({
         success: false,
-        message: "找不到食物資訊",
+        message: "找不到食物資訊"
       });
     }
   } catch {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
 
+// 新增商城產品的API
+router.post("/addProducts", async (req, res) => {
+  try {
+    const productID = uuidv4();
+    const { name, description, price, stock, category, image } = req.body;
+    const productData = {
+      productid: productID,
+      name,
+      description,
+      price,
+      stock,
+      category,
+      image
+    };
+    const sql = "INSERT INTO onlineProducts SET ?";
+    const { affectedRows } = await query(sql, productData);
+    if (affectedRows >= 1) {
+      res.status(201).json({
+        success: true,
+        message: "產品新增成功！"
+      });
+    } else {
+      res.json({
+        success: false,
+        message: "產品新增失敗。"
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: "伺服器錯誤。"
+    });
+  }
+});
+
+//會員列表
+router.get("/user_list", adminPassport, async (req, res) => {
+  try {
+    const { page, per_page } = req.query;
+    // 確認頁數
+    let perPage = parseInt(per_page) || 20;
+    let nowPage = parseInt(page) || 1;
+    const countSql = "SELECT COUNT(*) AS total_count FROM users ";
+    const [{ total_count: totalCount }] = await query(countSql);
+    let totalPages = Math.ceil(totalCount / perPage);
+    nowPage = nowPage > totalPages ? totalPages : nowPage;
+    // 取得會員列表
+    let getSql =
+      "SELECT user_id, username, email, avatar, gender, birthday, phone, address FROM users ORDER BY created_at DESC ";
+    let getParams = [];
+    if (!isNaN(nowPage) && nowPage > 0) {
+      getSql += "LIMIT ? OFFSET ? ";
+      getParams.push(perPage);
+      getParams.push((nowPage - 1) * perPage);
+    }
+    const getResults = await query(getSql, getParams);
+    const paginations = {
+      total_pages: totalPages,
+      current_page: nowPage,
+      per_page: perPage,
+      has_pre: nowPage >= 2,
+      has_next: nowPage < totalPages
+    };
+    if (getResults.length > 0) {
+      res.status(200).json({
+        success: true,
+        message: "已取得會員列表",
+        user_qty: totalCount,
+        users: getResults,
+        paginations
+      });
+    } else {
+      res.json({
+        success: false,
+        message: "沒有會員"
+      });
+    }
+  } catch {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "伺服器錯誤"
+    });
+  }
+});
 
 //訂單
 
-router.get('/orders', adminPassport, async (req, res) => {
+router.get("/orders", adminPassport, async (req, res) => {
   try {
-    let getquery = 'SELECT * FROM orders WHERE 1=1';
+    let getquery = "SELECT * FROM orders WHERE 1=1";
     const params = [];
 
     // 如果有產品ID參數，則加上產品ID條件
     if (req.query.productid) {
       const productId = req.query.productid;
-      getquery += ' AND order_id IN (SELECT order_id FROM order_details WHERE productid = ?)';
+      getquery +=
+        " AND order_id IN (SELECT order_id FROM order_details WHERE productid = ?)";
       params.push(productId);
     }
 
     // 如果有狀態參數，則加上狀態條件
     if (req.query.status) {
       const status = req.query.status;
-      getquery += ' AND status = ?';
+      getquery += " AND status = ?";
       params.push(status);
     }
 
@@ -461,7 +552,7 @@ router.get('/orders', adminPassport, async (req, res) => {
     if (req.query.start_date && req.query.end_date) {
       const startDate = req.query.start_date;
       const endDate = req.query.end_date;
-      getquery += ' AND order_time BETWEEN ? AND ?';
+      getquery += " AND order_time BETWEEN ? AND ?";
       params.push(startDate, endDate);
     }
 
@@ -469,16 +560,20 @@ router.get('/orders', adminPassport, async (req, res) => {
     const getOrdersResults = await query(getquery, params);
 
     if (getOrdersResults.length > 0) {
-      const orderIds = getOrdersResults.map(orders => `'${orders.order_id}'`).join(',');
+      const orderIds = getOrdersResults
+        .map((orders) => `'${orders.order_id}'`)
+        .join(",");
       const getOrderDetailsSql = `SELECT * FROM order_details WHERE order_id IN (${orderIds})`;
       const getOrderDetailsResults = await query(getOrderDetailsSql);
-      const orders = getOrdersResults.map(orders => {
-        orders.order_details = getOrderDetailsResults.filter(detail => detail.order_id === orders.order_id);
+      const orders = getOrdersResults.map((orders) => {
+        orders.order_details = getOrderDetailsResults.filter(
+          (detail) => detail.order_id === orders.order_id
+        );
         return orders;
       });
       res.status(200).json({
         success: true,
-        data: orders,
+        data: orders
       });
     } else {
       return res.status(404).json({
@@ -490,12 +585,12 @@ router.get('/orders', adminPassport, async (req, res) => {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '伺服器錯誤',
+      message: "伺服器錯誤"
     });
   }
 });
 
-router.put('/orders/:order_id', adminPassport, async (req, res) => {
+router.put("/orders/:order_id", adminPassport, async (req, res) => {
   try {
     const orderId = req.params.order_id;
     const {
@@ -512,7 +607,8 @@ router.put('/orders/:order_id', adminPassport, async (req, res) => {
       status
     } = req.body;
 
-    const updateSql = "UPDATE orders SET user_id = ?, phone = ?, name = ?, coupon_code = ?, total_quantity = ?, total_price = ?, payment_method = ?, shipping_method = ?, shipping_address = ?, ship_store = ?, status = ? WHERE order_id = ?";
+    const updateSql =
+      "UPDATE orders SET user_id = ?, phone = ?, name = ?, coupon_code = ?, total_quantity = ?, total_price = ?, payment_method = ?, shipping_method = ?, shipping_address = ?, ship_store = ?, status = ? WHERE order_id = ?";
     const params = [
       user_id,
       phone,
@@ -532,85 +628,107 @@ router.put('/orders/:order_id', adminPassport, async (req, res) => {
     if (affectedRows > 0) {
       res.status(200).json({
         success: true,
-        message: "已更新訂單",
+        message: "已更新訂單"
       });
     } else {
       res.json({
         success: false,
-        message: "更新訂單失敗",
+        message: "更新訂單失敗"
       });
     }
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤",
+      message: "伺服器錯誤"
     });
   }
 });
 
-router.delete('/orders/:order_id', adminPassport, async (req, res) => {
+router.delete("/orders/:order_id", adminPassport, async (req, res) => {
   try {
     const orderId = req.params.order_id;
-    const deleteOrderSql = 'DELETE FROM orders WHERE order_id = ?';
-    const deleteOrderDetailSql = 'DELETE FROM order_details WHERE order_id = ?';
+    const deleteOrderSql = "DELETE FROM orders WHERE order_id = ?";
+    const deleteOrderDetailSql = "DELETE FROM order_details WHERE order_id = ?";
     const { affectedRows: orderRows } = await query(deleteOrderSql, [orderId]);
-    const { affectedRows: orderDetailRows } = await query(deleteOrderDetailSql, [orderId]);
+    const { affectedRows: orderDetailRows } = await query(
+      deleteOrderDetailSql,
+      [orderId]
+    );
 
     if (orderRows > 0 && orderDetailRows > 0) {
       res.status(200).json({
         success: true,
-        message: '已刪除訂單',
+        message: "已刪除訂單"
       });
     } else {
       res.json({
         success: false,
-        message: '刪除訂單失敗',
+        message: "刪除訂單失敗"
       });
     }
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       success: false,
-      message: '伺服器錯誤',
+      message: "伺服器錯誤"
     });
   }
 });
 
-
 // 優惠券
-router.post('/coupon', adminPassport, async (req, res) => {
+router.post("/coupon", adminPassport, async (req, res) => {
   try {
-    const { code, name, discount_rate, discount_algorithm, description, usage_limit, start_date, end_date } = req.body;
-    const [coupon] = await query('SELECT * FROM coupons WHERE code = ?', [code]);
+    const {
+      code,
+      name,
+      discount_rate,
+      discount_algorithm,
+      description,
+      usage_limit,
+      start_date,
+      end_date
+    } = req.body;
+    const [coupon] = await query("SELECT * FROM coupons WHERE code = ?", [
+      code
+    ]);
     if (coupon) {
       return res.status(400).json({
         success: false,
-        message: '該優惠券代碼已存在'
+        message: "該優惠券代碼已存在"
       });
     }
     await query(
-      'INSERT INTO coupons (code, name, discount_rate, discount_algorithm, description, usage_limit, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [code, name, discount_rate, discount_algorithm, description, usage_limit, start_date, end_date]
+      "INSERT INTO coupons (code, name, discount_rate, discount_algorithm, description, usage_limit, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        code,
+        name,
+        discount_rate,
+        discount_algorithm,
+        description,
+        usage_limit,
+        start_date,
+        end_date
+      ]
     );
     res.json({
       success: true,
-      message: '新增優惠券成功'
+      message: "新增優惠券成功"
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '發生錯誤，請稍後再試'
+      message: "發生錯誤，請稍後再試"
     });
   }
 });
 
 // GET /coupon
 // 取得所有優惠券列表
-router.get('/coupon', adminPassport, async (req, res) => {
+router.get("/coupon", adminPassport, async (req, res) => {
   try {
-    const coupons = await query('SELECT * FROM coupons');
+    const coupons = await query("SELECT * FROM coupons");
     res.json({
       success: true,
       data: coupons
@@ -619,71 +737,91 @@ router.get('/coupon', adminPassport, async (req, res) => {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '發生錯誤，請稍後再試'
+      message: "發生錯誤，請稍後再試"
     });
   }
 });
 
 // PUT /coupon/:id
 // 修改指定優惠券
-router.put('/coupon/:coupon_id', adminPassport, async (req, res) => {
+router.put("/coupon/:coupon_id", adminPassport, async (req, res) => {
   try {
     const { coupon_id } = req.params;
-    const { name, discount_rate, discount_algorithm, description, usage_limit, start_date, end_date } = req.body;
+    const {
+      name,
+      discount_rate,
+      discount_algorithm,
+      description,
+      usage_limit,
+      start_date,
+      end_date
+    } = req.body;
 
-    const [coupon] = await query('SELECT * FROM coupons WHERE coupon_id = ?', [coupon_id]);
+    const [coupon] = await query("SELECT * FROM coupons WHERE coupon_id = ?", [
+      coupon_id
+    ]);
     if (!coupon) {
       return res.status(404).json({
         success: false,
-        message: '找不到該優惠券'
+        message: "找不到該優惠券"
       });
     }
 
     await query(
-      'UPDATE coupons SET name=?, discount_rate=?, discount_algorithm=?, description=?, usage_limit=?, start_date=?, end_date=? WHERE coupon_id=?',
-      [name, discount_rate, discount_algorithm, description, usage_limit, start_date, end_date, coupon_id]
+      "UPDATE coupons SET name=?, discount_rate=?, discount_algorithm=?, description=?, usage_limit=?, start_date=?, end_date=? WHERE coupon_id=?",
+      [
+        name,
+        discount_rate,
+        discount_algorithm,
+        description,
+        usage_limit,
+        start_date,
+        end_date,
+        coupon_id
+      ]
     );
 
     res.json({
       success: true,
-      message: '修改優惠券成功'
+      message: "修改優惠券成功"
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '伺服器錯誤'
+      message: "伺服器錯誤"
     });
   }
 });
 
 // 刪除指定優惠券
-router.delete('/coupon/:code', adminPassport, async (req, res) => {
+router.delete("/coupon/:code", adminPassport, async (req, res) => {
   try {
     const { code } = req.params;
 
-    const [coupon] = await query('SELECT * FROM coupons WHERE code = ?', [code]);
+    const [coupon] = await query("SELECT * FROM coupons WHERE code = ?", [
+      code
+    ]);
     if (!coupon) {
       return res.status(404).json({
         success: false,
-        message: '找不到該優惠券'
+        message: "找不到該優惠券"
       });
     }
 
-    await query('DELETE FROM coupons WHERE code = ?', [code]);
+    await query("DELETE FROM coupons WHERE code = ?", [code]);
 
     res.json({
       success: true,
-      message: '刪除優惠券成功'
+      message: "刪除優惠券成功"
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: '發生錯誤，請稍後再試'
+      message: "發生錯誤，請稍後再試"
     });
   }
 });
-
 
 module.exports = router;

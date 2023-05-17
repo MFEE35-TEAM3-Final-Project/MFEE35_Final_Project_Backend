@@ -16,6 +16,36 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `activity`
+--
+
+DROP TABLE IF EXISTS `activity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `activity` (
+  `activityId` varchar(255) NOT NULL,
+  `activityUrl` varchar(255) NOT NULL,
+  `activityDescription` varchar(500) DEFAULT NULL,
+  `activityName` varchar(50) NOT NULL,
+  `activityDiscount` varchar(50) NOT NULL,
+  `productid` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`activityId`),
+  KEY `productid` (`productid`),
+  CONSTRAINT `activity_ibfk_1` FOREIGN KEY (`productid`) REFERENCES `onlineproducts` (`productid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `activity`
+--
+
+LOCK TABLES `activity` WRITE;
+/*!40000 ALTER TABLE `activity` DISABLE KEYS */;
+INSERT INTO `activity` VALUES ('1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683006807/activity2_kb7e9p.jpg','第一個活動描述:\r\n商品全面特價9折','畢業歡送季節','0.9',NULL),('2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683006807/activity1_k7ljoh.jpg','第二個活動描述:\r\n老闆找到頭路，買一個送三個','買一送三買一送三','0.3',NULL);
+/*!40000 ALTER TABLE `activity` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `admins`
 --
 
@@ -31,7 +61,7 @@ CREATE TABLE `admins` (
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`sid`),
   UNIQUE KEY `adminId_UNIQUE` (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +70,7 @@ CREATE TABLE `admins` (
 
 LOCK TABLES `admins` WRITE;
 /*!40000 ALTER TABLE `admins` DISABLE KEYS */;
-INSERT INTO `admins` VALUES (1,3450349941,'Uikdiiioek','$2a$10$fXFZncA9bAE4JlxnaAr5sOOWfWx7hztOVjEhAfgL4Mkyb2Uj0aiKu','sssssss@glkajl.com','2023-04-10 06:18:00'),(2,1606116619,'Uikdiiioek','$2a$10$OtcEZSpSyeziXNf3TXgxYers74E74dhex.sbHWBod5FgKdYqFaJya','sssss545ss@glkajl.com','2023-04-10 06:18:26'),(3,7606591757,'CommonUse','$2a$10$U6iYfrrmnLbAQXg0Pjxyre9d1Zn5svaLssspNHfGdtR9pBnVNorqa','banana0583@fruitz.com','2023-04-10 07:26:33'),(4,4500310002,'CommonUse','$2a$10$AuGNxUbFN6Bi2Ra5lCOd5eBYdxLYURu6OaKQoJjZOQNo1pCzFD83K','banana058343@fruitz.com','2023-04-10 07:43:25'),(5,7427953964,'arimakana','$2a$10$0Vy5k88wPcwKZLzNnBMxY.o.xOHuUyQXM5u4HuSuGO5jMIChEYule','arimakana17@oshi.com','2023-04-23 05:01:56'),(6,6691530706,'hoshinoruby','$2a$10$QFiDv5amiH0z9NFeJpK2t.6Y0S87aj2TQQBS.d0kSctAc9FvAiSAC','hoshinoai556@oshi.com','2023-04-28 06:33:16');
+INSERT INTO `admins` VALUES (1,3450349941,'Uikdiiioek','$2a$10$fXFZncA9bAE4JlxnaAr5sOOWfWx7hztOVjEhAfgL4Mkyb2Uj0aiKu','sssssss@glkajl.com','2023-04-10 06:18:00'),(2,1606116619,'Uikdiiioek','$2a$10$OtcEZSpSyeziXNf3TXgxYers74E74dhex.sbHWBod5FgKdYqFaJya','sssss545ss@glkajl.com','2023-04-10 06:18:26'),(3,7606591757,'CommonUse','$2a$10$U6iYfrrmnLbAQXg0Pjxyre9d1Zn5svaLssspNHfGdtR9pBnVNorqa','banana0583@fruitz.com','2023-04-10 07:26:33'),(4,4500310002,'CommonUse','$2a$10$AuGNxUbFN6Bi2Ra5lCOd5eBYdxLYURu6OaKQoJjZOQNo1pCzFD83K','banana058343@fruitz.com','2023-04-10 07:43:25'),(5,7427953964,'arimakana','$2a$10$0Vy5k88wPcwKZLzNnBMxY.o.xOHuUyQXM5u4HuSuGO5jMIChEYule','arimakana17@oshi.com','2023-04-23 05:01:56'),(6,6691530706,'hoshinoruby','$2a$10$QFiDv5amiH0z9NFeJpK2t.6Y0S87aj2TQQBS.d0kSctAc9FvAiSAC','hoshinoai556@oshi.com','2023-04-28 06:33:16'),(7,1726203583,'aquamarine','$2a$10$.jUNis705eGAD3hE8zrXOOa3O97D0Xs5EBz.gRgYzSP5eCyAsq7/.','ai44510@oshi.com','2023-05-16 07:31:41'),(8,3617560625,'aquamarine','$2a$10$KjUDuRa1jTo9mPpaRS6DP./B/1DPRuYGlr/pf7hivbKF/HTS4qeaq','mongo87@fruit.com','2023-05-16 10:58:57');
 /*!40000 ALTER TABLE `admins` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,14 +83,14 @@ DROP TABLE IF EXISTS `article_comments`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `article_comments` (
   `comment_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `article_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `comment` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`comment_id`),
-  KEY `article_id_idx` (`article_id`),
-  CONSTRAINT `fk_article_comment` FOREIGN KEY (`article_id`) REFERENCES `articles` (`article_id`) ON DELETE CASCADE
+  KEY `fk_article_comment_idx` (`article_id`),
+  CONSTRAINT `fk_article_comment` FOREIGN KEY (`article_id`) REFERENCES `articles` (`article_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -71,34 +101,6 @@ CREATE TABLE `article_comments` (
 LOCK TABLES `article_comments` WRITE;
 /*!40000 ALTER TABLE `article_comments` DISABLE KEYS */;
 /*!40000 ALTER TABLE `article_comments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `article_meg`
---
-
-DROP TABLE IF EXISTS `article_meg`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `article_meg` (
-  `sid` int NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `article_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `comment` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`sid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `article_meg`
---
-
-LOCK TABLES `article_meg` WRITE;
-/*!40000 ALTER TABLE `article_meg` DISABLE KEYS */;
-INSERT INTO `article_meg` VALUES (1,'9731103331','048a772a-3bfe-4155-b622-1054d22ba75b','When I feel lonely I would buy some shares. It\'s nice to have a bit of company. :-|&lt;&gt;','2023-04-28 08:11:34','2023-04-28 08:11:34'),(2,'9731103331','048a772a-3bfe-4155-b622-1054d22ba75b','When I feel lonely I would buy some shares. It\'s nice to have a bit of company. :-|&lt;&gt;','2023-04-28 08:20:40','2023-04-28 08:20:40');
-/*!40000 ALTER TABLE `article_meg` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -113,8 +115,8 @@ CREATE TABLE `articles` (
   `admin_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `title` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sub_title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `cover_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sub_title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cover_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `is_published` tinyint NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -129,8 +131,68 @@ CREATE TABLE `articles` (
 
 LOCK TABLES `articles` WRITE;
 /*!40000 ALTER TABLE `articles` DISABLE KEYS */;
-INSERT INTO `articles` VALUES ('209fa784-0c49-4532-b7dd-fe2ee25efd0e','6691530706','HEALTHY','test word 0426','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:42:33','2023-05-10 05:38:16'),('39219673-f8cb-4504-a278-e2f23c7981ba','6691530706','FITNESS','test word 0510','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:52','2023-05-10 05:38:16'),('3f52f526-d26d-437f-829f-6bd6b95f9b8d','6691530706','FITNESS','test word 0510','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:54','2023-05-10 05:38:16'),('42b3b3cb-1c1d-4a07-a01a-e744e6690987','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>I ate banana today</p>',0,'2023-04-25 04:02:42','2023-05-10 05:38:16'),('52abda83-f635-4738-a876-0e39b1da5fcf','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>lakfjslakjlakj;sdsd</p>',0,'2023-04-25 03:39:15','2023-05-10 05:38:16'),('6d1cd5fc-d537-48ee-9086-0e0db6e8e114','6691530706','FITNESS','test word 0510','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:53','2023-05-10 05:38:16'),('6dc1d5ea-1978-4599-8e24-7fe7a4dccd7c','6691530706','FITNESS','test word 0510','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:54','2023-05-10 05:38:16'),('80385683-2b51-43bf-9ced-cfadc87cf44d','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>AAAABBBdsfCC</p>',0,'2023-04-24 07:29:55','2023-05-10 05:38:16'),('80662a00-0ab6-47d1-b45b-12d489e75e89','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>&lt;a href=\"javascript:(alert(document.domain))\"&gt;XSS&lt;/a&gt;</p>',0,'2023-04-25 02:56:34','2023-05-10 05:38:16'),('849bdd6f-692c-446f-affc-be6819c0e34d','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>&lt;p&gt;&lt;a href=\"javascript:(alert(document.domain))\"&gt;XSS&lt;/a&gt;&lt;/p&gt;</p>',0,'2023-04-25 02:57:14','2023-05-10 05:38:16'),('9136cbab-fd0b-49be-8e0f-aa6b8b38ba40','6691530706','NUTRITION','NUTRITION test word 0510','mango','https://imgur.com/4TuQJDn','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:35','2023-05-10 05:38:16'),('9a66fa75-1198-4199-b9a3-4d2fb790cdf2','6691530706','NUTRITION','NUTRITION test word 0510','mango','https://imgur.com/4TuQJDn','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:36','2023-05-10 05:38:16'),('9ac0e00a-b0f5-4b1a-b28a-9f44eb5d3a9c','6691530706','HEALTHY','test word 0426',NULL,'https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-04-28 06:38:07','2023-05-10 05:38:16'),('afe19d79-5ccb-4414-a943-efb124086ff6','6691530706','HEALTHY','WHA 0428','pear','https://imgur.com/4TuQJDn','<p>InAFFFFFFF</p>',0,'2023-04-28 06:33:48','2023-05-10 05:38:16'),('c95128a7-8e13-47a1-8405-d36fd59c459c','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>&lt;<strong>form</strong>&gt; &lt;<strong>math</strong>&gt;&lt;<strong>mtext</strong>&gt; &lt;/<strong>form</strong>&gt;&lt;<strong>form</strong>&gt; &lt;<strong>mglyph</strong>&gt; &lt;<strong>style</strong>&gt;&lt;/<strong>math</strong>&gt;&lt;<strong>img</strong> src onerror=alert(1)&gt;</p>',0,'2023-04-25 02:54:19','2023-05-10 05:38:16'),('ca560c5f-0bbb-4e2b-9dc8-90cb4ec133e6','6691530706','NUTRITION','NUTRITION test word 0510','mango','https://imgur.com/4TuQJDn','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:37','2023-05-10 05:38:16'),('d140adf0-c2a2-4f4e-a403-a8455646f95f','6691530706','NUTRITION','NUTRITION test word 0510','mango','https://imgur.com/4TuQJDn','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:34','2023-05-10 05:38:16'),('d56d168c-ce6a-4a10-b80e-54be72f23271','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>sadfdadadad</p>',0,'2023-04-25 01:43:07','2023-05-10 05:38:16'),('db077c0f-6e0c-4b0e-86fc-e98b7b4ef9b2','6691530706','FITNESS','test word 0510','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:52','2023-05-10 05:38:16'),('ddbecccf-a595-4b1c-9a3f-96f81f9570ef','6691530706','NUTRITION','NUTRITION test word 0510','mango','https://imgur.com/4TuQJDn','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:36','2023-05-10 05:38:16'),('e459441c-cc1c-4e41-98bd-071cce81a49c','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p><p><strong>&lt;script&gt;console.log(\"hello idiot\") &lt;script/&gt;</strong></p>',0,'2023-04-25 02:54:08','2023-05-10 05:38:16'),('e83df9ba-ee7c-440a-b027-819223ce6497','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p>',0,'2023-04-25 02:18:40','2023-05-10 05:38:16'),('feaed32e-4a72-48d6-963a-d96869ddba15','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p><p><strong>&lt;script&gt;console.log(\"hello idiot\") &lt;script/&gt;</strong></p>',0,'2023-04-25 02:25:33','2023-05-10 05:38:16');
+INSERT INTO `articles` VALUES ('209fa784-0c49-4532-b7dd-fe2ee25efd0e','6691530706','HEALTHY','test word 0426','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:42:33','2023-05-10 05:38:16'),('39219673-f8cb-4504-a278-e2f23c7981ba','6691530706','FITNESS','test word 0510','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:52','2023-05-10 05:38:16'),('3f52f526-d26d-437f-829f-6bd6b95f9b8d','6691530706','FITNESS','test word 0510','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:54','2023-05-10 05:38:16'),('42b3b3cb-1c1d-4a07-a01a-e744e6690987','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>I ate banana today</p>',0,'2023-04-25 04:02:42','2023-05-10 05:38:16'),('52abda83-f635-4738-a876-0e39b1da5fcf','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>lakfjslakjlakj;sdsd</p>',0,'2023-04-25 03:39:15','2023-05-10 05:38:16'),('6d1cd5fc-d537-48ee-9086-0e0db6e8e114','6691530706','FITNESS','test word 0510','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:53','2023-05-10 05:38:16'),('6dc1d5ea-1978-4599-8e24-7fe7a4dccd7c','6691530706','FITNESS','test word 0510','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:54','2023-05-10 05:38:16'),('80385683-2b51-43bf-9ced-cfadc87cf44d','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>AAAABBBdsfCC</p>',0,'2023-04-24 07:29:55','2023-05-10 05:38:16'),('80662a00-0ab6-47d1-b45b-12d489e75e89','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>&lt;a href=\"javascript:(alert(document.domain))\"&gt;XSS&lt;/a&gt;</p>',0,'2023-04-25 02:56:34','2023-05-10 05:38:16'),('849bdd6f-692c-446f-affc-be6819c0e34d','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>&lt;p&gt;&lt;a href=\"javascript:(alert(document.domain))\"&gt;XSS&lt;/a&gt;&lt;/p&gt;</p>',0,'2023-04-25 02:57:14','2023-05-10 05:38:16'),('8738c918-f849-4639-8bcb-86ab50a71977','1726203583','HEALTHY','WHA 0516 ','oaoaoaoao','https://imgur.com/4TuQJDn.jpg','<p>InAFFFFFFFWWWWWWWWWWWWWWWW</p>',0,'2023-05-16 07:23:25','2023-05-16 07:35:56'),('9136cbab-fd0b-49be-8e0f-aa6b8b38ba40','6691530706','NUTRITION','NUTRITION test word 0510','mango','https://imgur.com/4TuQJDn','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:35','2023-05-10 05:38:16'),('9a66fa75-1198-4199-b9a3-4d2fb790cdf2','6691530706','NUTRITION','NUTRITION test word 0510','mango','https://imgur.com/4TuQJDn','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:36','2023-05-10 05:38:16'),('9ac0e00a-b0f5-4b1a-b28a-9f44eb5d3a9c','6691530706','HEALTHY','test word 0426',NULL,'https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-04-28 06:38:07','2023-05-10 05:38:16'),('aae6cbdb-10f1-492d-a4b6-e8fddda1cd51','6691530706','NUTRITION','FITness test word 0516','mango','https://imgur.com/4TuQJDn.jpg','<p>It\'s a sweet mango~</p>',0,'2023-05-16 07:24:10','2023-05-16 07:24:10'),('afe19d79-5ccb-4414-a943-efb124086ff6','6691530706','HEALTHY','WHA 0428','pear','https://imgur.com/4TuQJDn','<p>InAFFFFFFF</p>',0,'2023-04-28 06:33:48','2023-05-10 05:38:16'),('c95128a7-8e13-47a1-8405-d36fd59c459c','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>&lt;<strong>form</strong>&gt; &lt;<strong>math</strong>&gt;&lt;<strong>mtext</strong>&gt; &lt;/<strong>form</strong>&gt;&lt;<strong>form</strong>&gt; &lt;<strong>mglyph</strong>&gt; &lt;<strong>style</strong>&gt;&lt;/<strong>math</strong>&gt;&lt;<strong>img</strong> src onerror=alert(1)&gt;</p>',0,'2023-04-25 02:54:19','2023-05-10 05:38:16'),('ca560c5f-0bbb-4e2b-9dc8-90cb4ec133e6','6691530706','NUTRITION','NUTRITION test word 0510','mango','https://imgur.com/4TuQJDn','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:37','2023-05-10 05:38:16'),('d140adf0-c2a2-4f4e-a403-a8455646f95f','6691530706','NUTRITION','NUTRITION test word 0510','mango','https://imgur.com/4TuQJDn','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:34','2023-05-10 05:38:16'),('d56d168c-ce6a-4a10-b80e-54be72f23271','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<p>sadfdadadad</p>',0,'2023-04-25 01:43:07','2023-05-10 05:38:16'),('db077c0f-6e0c-4b0e-86fc-e98b7b4ef9b2','6691530706','FITNESS','test word 0510','this is for test all.','https://imgur.com/4TuQJDn','<p>It\'s a banana~</p>',0,'2023-05-10 03:43:52','2023-05-10 05:38:16'),('ddbecccf-a595-4b1c-9a3f-96f81f9570ef','6691530706','NUTRITION','NUTRITION test word 0510','mango','https://imgur.com/4TuQJDn','<p>It\'s a sweet mango~</p>',0,'2023-05-10 03:45:36','2023-05-10 05:38:16'),('e459441c-cc1c-4e41-98bd-071cce81a49c','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p><p><strong>&lt;script&gt;console.log(\"hello idiot\") &lt;script/&gt;</strong></p>',0,'2023-04-25 02:54:08','2023-05-10 05:38:16'),('e83df9ba-ee7c-440a-b027-819223ce6497','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p>',0,'2023-04-25 02:18:40','2023-05-10 05:38:16'),('feaed32e-4a72-48d6-963a-d96869ddba15','7427953964','HEALTHY','test word',NULL,'https://imgur.com/4TuQJDn','<h2>AAAlia</h2><p>你好</p><blockquote><p>sdfsdsfsf</p><p>sdfsfs</p></blockquote><p>&nbsp;</p><figure class=\"media\"><oembed url=\"https://youtu.be/gX9m-rCtSqc\"></oembed></figure><p>&nbsp;</p><p>sadfdada<strong>dad</strong></p><p><strong>&lt;script&gt;console.log(\"hello idiot\") &lt;script/&gt;</strong></p>',0,'2023-04-25 02:25:33','2023-05-10 05:38:16');
 /*!40000 ALTER TABLE `articles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `coupons`
+--
+
+DROP TABLE IF EXISTS `coupons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `coupons` (
+  `coupon_id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `discount_rate` decimal(10,2) NOT NULL,
+  `discount_algorithm` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `usage_limit` int DEFAULT NULL,
+  `usage_count` int DEFAULT '0',
+  `start_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`coupon_id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `coupons`
+--
+
+LOCK TABLES `coupons` WRITE;
+/*!40000 ALTER TABLE `coupons` DISABLE KEYS */;
+INSERT INTO `coupons` VALUES (3,'ABC123','特惠日優惠券',0.80,'percentage','特惠日優惠券，享有八折優惠',1000,0,'2022-06-01 00:00:00','2022-06-30 23:59:59','2023-05-10 07:06:38','2023-05-10 07:06:38'),(4,'ABC123sss','特惠日優惠券',0.80,'percentage','特惠日優惠券，享有八折優惠',1000,0,'2022-06-01 00:00:00','2022-06-30 23:59:59','2023-05-11 06:49:44','2023-05-11 06:49:44');
+/*!40000 ALTER TABLE `coupons` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `discounts`
+--
+
+DROP TABLE IF EXISTS `discounts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `discounts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `discount_percent` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `discounts`
+--
+
+LOCK TABLES `discounts` WRITE;
+/*!40000 ALTER TABLE `discounts` DISABLE KEYS */;
+INSERT INTO `discounts` VALUES (1,'活動同種類第二件五折',0.50);
+/*!40000 ALTER TABLE `discounts` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -164,6 +226,31 @@ CREATE TABLE `exercise_records` (
 LOCK TABLES `exercise_records` WRITE;
 /*!40000 ALTER TABLE `exercise_records` DISABLE KEYS */;
 /*!40000 ALTER TABLE `exercise_records` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `favorite`
+--
+
+DROP TABLE IF EXISTS `favorite`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `favorite` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `favorite`
+--
+
+LOCK TABLES `favorite` WRITE;
+/*!40000 ALTER TABLE `favorite` DISABLE KEYS */;
+/*!40000 ALTER TABLE `favorite` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -239,6 +326,135 @@ INSERT INTO `meal_records` VALUES (2,'6818255871','2023-05-02 00:00:00','dinner'
 UNLOCK TABLES;
 
 --
+-- Table structure for table `onlineproducts`
+--
+
+DROP TABLE IF EXISTS `onlineproducts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `onlineproducts` (
+  `productid` varchar(50) NOT NULL,
+  `food_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  `storage_method` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `stock` int NOT NULL,
+  `category` varchar(255) NOT NULL,
+  `activityId` varchar(255) NOT NULL,
+  `image` varchar(1500) DEFAULT NULL,
+  `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `end_date` timestamp NOT NULL DEFAULT '2038-01-18 19:14:07',
+  PRIMARY KEY (`productid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `onlineproducts`
+--
+
+LOCK TABLES `onlineproducts` WRITE;
+/*!40000 ALTER TABLE `onlineproducts` DISABLE KEYS */;
+INSERT INTO `onlineproducts` VALUES ('04b15522-6e0a-448a-86fe-6f2da58da30f','A0310101','我是測試產品','測試','',123123.00,213123,'1','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:49','2038-01-18 19:14:07'),('0861bb46-c0b8-45c9-9b55-c53e812547de','A0320101','我是測試產品','測試','',123123.00,213123,'2','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:07','2038-01-18 19:14:07'),('09f437e8-169e-4dc0-80c1-f222b3719009','A0350101','我是測試產品','測試','',123123.00,213123,'3','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:40','2038-01-18 19:14:07'),('0b1b3b6c-7a94-468a-8a4b-6fc7d2899cc0','A0350101','我是測試產品','測試','',123123.00,213123,'1','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:33','2038-01-18 19:14:07'),('1a5d939b-a7cd-49b4-83cc-7a662a522bed','A0350101','我是測試產品','測試','',123123.00,213123,'1','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:06','2038-01-18 19:14:07'),('1b523d52-ba1d-4e85-81d9-5b5f1d4a39a3','A0350101','我是測試產品','測試','',123123.00,213123,'2','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:48:48','2038-01-18 19:14:07'),('1faf2d28-dc53-42ed-9c8a-9bf510660114','A0350101','我是測試產品','測試','',123123.00,213123,'3','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:44','2038-01-18 19:14:07'),('1fd5fdd6-3417-44e6-8e0b-fac63eeb14dd','A0350101','我是測試產品','測試','',123123.00,213123,'1','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:01','2038-01-18 19:14:07'),('21155101-78ba-44f6-91eb-818604969198','A0350101','我是測試產品','測試','',123123.00,213123,'1','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:58','2038-01-18 19:14:07'),('222ff8d9-f312-4943-8422-d9998176306d','A0350101','我是測試產品','測試','',123123.00,213123,'2','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:03','2038-01-18 19:14:07'),('28193ba4-7a92-4780-ba34-40b480dec326','A0350101','我是測試產品','測試','',123123.00,213123,'2','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:56','2038-01-18 19:14:07'),('2c41ba38-1a41-4dc8-b303-7cedd6916dad','A0350101','我是測試產品','測試','',123123.00,213123,'3','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:05','2038-01-18 19:14:07'),('2c9e966a-7d3e-4733-946e-7adc0c152b60','A0350101','我是測試產品','測試','',123123.00,213123,'3','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:29','2038-01-18 19:14:07'),('3901b983-b839-4eb9-8bdd-78dd0b2b835d','A0350101','我是測試產品','測試','',123123.00,213123,'1','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:30','2038-01-18 19:14:07'),('3ae3a4bd-1b4a-4a1c-b446-ee975d1abb19','A0350101','我是測試產品','測試','',123123.00,213123,'1','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:07','2038-01-18 19:14:07'),('3b36b512-f340-4d1b-bf2b-e8c4d119b3b6','A0350101','我是測試產品','測試','',123123.00,213123,'2','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:04','2038-01-18 19:14:07'),('3d38974b-b4b7-4fdf-8957-0eeb5af604a9','A0350101','我是測試產品','測試','',123123.00,213123,'2','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:08','2038-01-18 19:14:07'),('424de054-2c92-45bd-87e8-f714068e02f1','A0350101','我是測試產品','測試','',123123.00,213123,'2','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:01','2038-01-18 19:14:07'),('4452cc33-f2d6-4f71-b150-c873595c5a1e','A0350101','我是測試產品','測試','',123123.00,213123,'1','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:48:55','2038-01-18 19:14:07'),('47e19324-abc0-4208-a4cd-a8819e346e2e','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:35','2038-01-18 19:14:07'),('49e26bb5-bae5-4740-93b7-8249f9dfd502','A0350101','我是測試產品','測試','',123123.00,213123,'1','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:08','2038-01-18 19:14:07'),('5010d18a-bfb2-402c-8659-186151480f15','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:48:55','2038-01-18 19:14:07'),('544bc500-7c01-4933-ba38-3790a8233bc5','A0350101','我是測試產品','測試','',123123.00,213123,'1','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:48:54','2038-01-18 19:14:07'),('5c05c859-3f21-4e88-b033-14755e71c224','A0350101','我是測試產品','測試','',123123.00,213123,'1','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:02','2038-01-18 19:14:07'),('5dfda339-ddf4-4ca7-a9b2-091d141c1a41','A0350101','我是測試產品','測試','',123123.00,213123,'1','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:34','2038-01-18 19:14:07'),('61d6b226-94c4-480f-8472-87ba7c779465','A0350101','我是測試產品','測試','',123123.00,213123,'1','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:10','2038-01-18 19:14:07'),('789f1098-6fb7-4717-8dc3-b1ceb6308a9f','A0350101','我是測試產品','測試','',123123.00,213123,'1','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:05','2038-01-18 19:14:07'),('853e1640-5363-4d88-987a-c4757878b151','A0350101','我是測試產品','測試','',123123.00,213123,'1','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:48:51','2038-01-18 19:14:07'),('85b906a8-54ce-4512-9b8e-688fa165ebbb','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:38','2038-01-18 19:14:07'),('9271a9aa-667c-45a2-b76d-037109b9eaa2','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:00','2038-01-18 19:14:07'),('962a4d48-700b-4196-ba73-45d2aef62222','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:04','2038-01-18 19:14:07'),('97977897-be9f-4438-92d7-e9614c5e1014','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:51','2038-01-18 19:14:07'),('9b4a5051-ec5c-4208-8e3e-a9173416995d','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:54','2038-01-18 19:14:07'),('a2942d53-ba32-40c6-b4fd-caab2a3eb83c','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:48:53','2038-01-18 19:14:07'),('aaad59b4-97d4-4c1a-9d42-a4cc52027ae6','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:53','2038-01-18 19:14:07'),('afb9161a-2b0c-4f8b-af44-7987460ef14f','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:59','2038-01-18 19:14:07'),('b1273aac-8566-4ea5-ba76-5c3d85f84e89','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:32','2038-01-18 19:14:07'),('b27a004e-5ef2-45a9-8500-ffb2abc7d417','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:23','2038-01-18 19:14:07'),('bca53ae4-5543-46e0-9a3f-4fabcc8480b0','A0350101','我是測試產品','測試','',123123.00,213123,'2','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:00','2038-01-18 19:14:07'),('c0079ed6-e6bd-4ccd-abc7-817eae6d6a77','A0350101','我是測試產品','測試','',123123.00,213123,'測試','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:47','2038-01-18 19:14:07'),('c56cbb30-c63f-4ca9-8105-ff15cc35fbf7','A0350101','我是測試產品','測試','',123123.00,213123,'測試','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:09','2038-01-18 19:14:07'),('c74e9aea-b576-4a75-a8fd-76a7a3b69e8c','A0350101','我是測試產品','測試','',123123.00,213123,'測試','2','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:48:52','2038-01-18 19:14:07'),('c7bfac87-288d-4cab-b391-bef82af434ec','A0350101','我是測試產品','測試','',123123.00,213123,'測試','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:27','2038-01-18 19:14:07'),('cc6844fd-87ec-46aa-b47a-7a3b009b4d5a','A0350101','我是測試產品','測試','',123123.00,213123,'測試','1','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:33','2038-01-18 19:14:07'),('ce18bb2b-6fe5-4d97-93f1-2966ddef5a3f','A0350101','我是測試產品','測試','',123123.00,213123,'測試','','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:48:53','2038-01-18 19:14:07'),('d35d46ac-c0e9-4099-8c19-e6595a034026','A0350101','我是測試產品','測試','',123123.00,213123,'測試','','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:09','2038-01-18 19:14:07'),('e61d070f-b852-45f5-8a87-24e9d5fba02f','A0350101','我是測試產品','測試','',123123.00,213123,'測試','','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:48:47','2038-01-18 19:14:07'),('f10c15e2-50c4-4b35-8b29-c1382555b4e6','A0350101','我是測試產品','測試','',123123.00,213123,'測試','','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:49:46','2038-01-18 19:14:07'),('f1d982bf-d45e-4182-9d97-a9c39cf66f7a','A0350101','我是測試產品','測試','',123123.00,213123,'測試','','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:48:57','2038-01-18 19:14:07'),('fc775994-9bc3-4f94-be6a-b645d8cb9e9d','','我是測試產品','測試','',123123.00,213123,'測試','','https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/ipltppdac2iqofo7hu2s.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013671/id84bscatdbf3cd4xlxi.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/sikm69rxk7tt0cucxpwf.png,https://res.cloudinary.com/ddh6e9dad/image/upload/v1683013672/jzptrshdckcbeyxac933.png,','2023-05-02 07:50:03','2038-01-18 19:14:07');
+/*!40000 ALTER TABLE `onlineproducts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_details`
+--
+
+DROP TABLE IF EXISTS `order_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order_details` (
+  `detail_id` int NOT NULL AUTO_INCREMENT,
+  `order_id` char(36) NOT NULL,
+  `productid` varchar(50) NOT NULL,
+  `quantity` int NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`detail_id`),
+  KEY `product_id` (`productid`),
+  KEY `order_details_ibfk_1` (`order_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_details`
+--
+
+LOCK TABLES `order_details` WRITE;
+/*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
+INSERT INTO `order_details` VALUES (53,'4428f229-bed4-4c40-8c1f-73c3d6709402','04b15522-6e0a-448a-86fe-6f2da58da30f',2,500.00),(54,'4428f229-bed4-4c40-8c1f-73c3d6709402','0861bb46-c0b8-45c9-9b55-c53e812547de',1,500.00),(55,'9084c680-e179-4e70-b8da-e43a48b5eb93','0861bb46-c0b8-45c9-9b55-c53e812547de',1,500.00),(56,'9084c680-e179-4e70-b8da-e43a48b5eb93','04b15522-6e0a-448a-86fe-6f2da58da30f',2,500.00);
+/*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `order_id` char(36) NOT NULL,
+  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(50) NOT NULL,
+  `phone` varchar(10) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `coupon_code` varchar(20) DEFAULT NULL,
+  `total_quantity` int DEFAULT NULL,
+  `total_price` decimal(10,2) DEFAULT NULL,
+  `payment_method` varchar(20) DEFAULT NULL,
+  `shipping_method` varchar(20) DEFAULT NULL,
+  `shipping_address` varchar(100) DEFAULT NULL,
+  `ship_store` varchar(50) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`order_id`),
+  KEY `user_idfk_1` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES ('4428f229-bed4-4c40-8c1f-73c3d6709402','4152607872','ppppppp@gmail.com','0987654321','John Doe',NULL,3,1500.00,'credit_card',NULL,'No. 123, Main Street, Taipei City','My Store','unpaid','2023-05-11 14:00:18'),('9084c680-e179-4e70-b8da-e43a48b5eb93','4152607872','ppppppp@gmail.com','0987654321','John Doe',NULL,3,1500.00,'credit_card',NULL,'No. 123, Main Street, Taipei City','My Store','unpaid','2023-05-11 14:04:57');
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `shopping_cart`
+--
+
+DROP TABLE IF EXISTS `shopping_cart`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `shopping_cart` (
+  `cart_id` varchar(10) NOT NULL,
+  `user_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productid` varchar(50) NOT NULL,
+  `quantity` int NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`cart_id`),
+  KEY `product_id` (`productid`),
+  KEY `shopping_cart_ibfk_2` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shopping_cart`
+--
+
+LOCK TABLES `shopping_cart` WRITE;
+/*!40000 ALTER TABLE `shopping_cart` DISABLE KEYS */;
+INSERT INTO `shopping_cart` VALUES ('172904','4152607872','09f437e8-169e-4dc0-80c1-f222b3719009',4,'2023-05-11 02:29:51');
+/*!40000 ALTER TABLE `shopping_cart` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -252,13 +468,15 @@ CREATE TABLE `users` (
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `username` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` enum('male','female') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `birthday` date NOT NULL,
   `phone` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`sid`),
   UNIQUE KEY `userId_UNIQUE` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -267,7 +485,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'5590613616','lskfsl@lkfjl','lsdkfj2313',NULL,NULL,NULL,NULL,'2023-04-01 13:11:54','2023-04-29 07:58:48'),(2,'5624963453','lskfsdsfsl@lkfjl','lsdkfj2313',NULL,NULL,NULL,NULL,'2023-04-01 13:13:33','2023-04-29 07:58:48'),(3,'3162557974','lskfsdddsfsl@lkfjl','lsdkfj2313',NULL,NULL,NULL,NULL,'2023-04-01 13:14:26','2023-04-29 07:58:48'),(4,'3262222356','noraisin@toko.com','Ab123456',NULL,NULL,NULL,NULL,'2023-04-01 16:25:59','2023-04-29 07:58:48'),(5,'9960669470','banana0583@fruitz.com','$2a$10$nm9ukuCK87l/lTfThxjZwO6dc5N6qMr2zMOEFX4mQEDzrecEYNE.m',NULL,NULL,NULL,NULL,'2023-04-06 03:32:16','2023-04-29 07:58:48'),(6,'7400633609','watermelon3325@furuz.com','$2a$10$5uErJ8X7mDAj6kgkDQMCPOq8n/9e/MNICg3eijyeLLXVvONARMHHK',NULL,NULL,NULL,NULL,'2023-04-06 03:52:28','2023-04-29 07:58:48'),(7,'5453336177','Alon1131@guik.com','$2a$10$ydNBGUsdd6xgT4w8o7WiFeUzls2fTXExtBxNXyX6juJGo.yvAf0Y.',NULL,NULL,NULL,NULL,'2023-04-10 06:20:24','2023-04-29 07:58:48'),(8,'6076469144','uuid12333@llakke.com','$2a$10$UaHI92cuz925g3Secvypreg/EbC4nhvYWA32cXTiP7DL17KiKXINC','uejj558',NULL,NULL,NULL,'2023-04-19 03:28:45','2023-04-29 07:58:48'),(9,'9731103331','AAAAABBB@gmail.com','$2a$10$rwKg160ycTIyD/LlqqL3DOK0i0cAJXwa7tQQ0s.ZmdDxuq6E0OSqy','sldkfjsl645454',NULL,NULL,NULL,'2023-04-28 03:29:56','2023-04-29 07:58:48'),(10,'6818255871','AAAAAAAeeeel@gmail.com','$2a$10$J1aGBYqcJlHO0pBvA/KXsOZm6/aTLq.bulQ/jVRYvnbTfT1pULuX6','test2',NULL,NULL,NULL,'2023-04-29 07:36:36','2023-04-29 07:58:48');
+INSERT INTO `users` VALUES (1,'5590613616','lskfsl@lkfjl','lsdkfj2313',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 13:11:54','2023-05-11 07:51:07'),(2,'5624963453','lskfsdsfsl@lkfjl','lsdkfj2313',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 13:13:33','2023-05-11 07:51:07'),(3,'3162557974','lskfsdddsfsl@lkfjl','lsdkfj2313',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 13:14:26','2023-05-11 07:51:07'),(4,'3262222356','noraisin@toko.com','Ab123456',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-01 16:25:59','2023-05-11 07:51:07'),(5,'9960669470','banana0583@fruitz.com','$2a$10$nm9ukuCK87l/lTfThxjZwO6dc5N6qMr2zMOEFX4mQEDzrecEYNE.m',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-06 03:32:16','2023-05-11 07:51:07'),(6,'7400633609','watermelon3325@furuz.com','$2a$10$5uErJ8X7mDAj6kgkDQMCPOq8n/9e/MNICg3eijyeLLXVvONARMHHK',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-06 03:52:28','2023-05-11 07:51:07'),(7,'5453336177','Alon1131@guik.com','$2a$10$ydNBGUsdd6xgT4w8o7WiFeUzls2fTXExtBxNXyX6juJGo.yvAf0Y.',NULL,NULL,'female','1995-05-20',NULL,NULL,'2023-04-10 06:20:24','2023-05-11 07:51:07'),(8,'6076469144','uuid12333@llakke.com','$2a$10$UaHI92cuz925g3Secvypreg/EbC4nhvYWA32cXTiP7DL17KiKXINC','uejj558',NULL,'female','1995-05-20',NULL,NULL,'2023-04-19 03:28:45','2023-05-11 07:51:07'),(9,'9731103331','AAAAABBB@gmail.com','$2a$10$rwKg160ycTIyD/LlqqL3DOK0i0cAJXwa7tQQ0s.ZmdDxuq6E0OSqy','sldkfjsl645454',NULL,'female','1995-05-20',NULL,NULL,'2023-04-28 03:29:56','2023-05-11 07:51:07'),(10,'6818255871','AAAAAAAeeeel@gmail.com','$2a$10$J1aGBYqcJlHO0pBvA/KXsOZm6/aTLq.bulQ/jVRYvnbTfT1pULuX6','test2',NULL,'female','1995-05-20',NULL,NULL,'2023-04-29 07:36:36','2023-05-11 07:51:07'),(11,'6599534247','kkdkllek@gmail.com','$2a$10$HxNwU0hW0ywiOFkywvXonuf6jBk9YOmD7xws41TGZLzeL1Em0JBz.','test0516-1','','male','2000-02-29','','','2023-05-16 03:47:33','2023-05-16 03:47:33'),(12,'6826965306','takoyaki56@gmail.com','$2a$10$iap7nXj3uCW.Xg.9b5LBTeONW8fVpdnrLljpnw3bcyZ8BXMlBROIS','takoyaki56','https://imgur.com/4TuQJDn.jpg','male','2000-02-29','0988775566','林公司的地址','2023-05-16 03:50:59','2023-05-16 03:50:59'),(13,'7271242354','test0516@test.com','$2a$10$GJM5RYuJyuJ5N8OEEkxBKunbJSTFsm/ELa4uppb2LHyRqTRhh92p6','takoyaki56','https://imgur.com/4TuQJDn.jpg','male','2000-02-29','0988775566','林公司的地址','2023-05-16 10:55:15','2023-05-16 10:55:15');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -280,4 +498,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-10 13:42:49
+-- Dump completed on 2023-05-16 19:01:20
