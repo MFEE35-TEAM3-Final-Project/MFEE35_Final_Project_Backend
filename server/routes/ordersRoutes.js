@@ -7,15 +7,6 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const {
-  registerValidation,
-  loginValidation,
-  exerciseRecordsValidation,
-  articleMegValid,
-  mealRecordValid
-} = require("../models/validation");
-const xss = require("xss");
-
 // middleware
 router.use((req, res, next) => {
   console.log("A request is coming in to orderRRRRRR!");
@@ -72,6 +63,125 @@ router.get('/search', async (req, res) => {
     res.status(500).json({
       success: false,
       message: "伺服器錯誤",
+    });
+  }
+});
+
+router.post("/order", async (req, res) => {
+  try {
+    const status = "created";
+    const order_id = uuidv4();
+
+    const {
+      phone,
+      name,
+      email,
+      coupon_code,
+      total_quantity,
+      total_price,
+      payment_method,
+      shipping_address,
+      ship_store,
+      order_details
+    } = req.body;
+    let user_id = null
+    if (!order_details || order_details.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "訂單詳情為空"
+      });
+    }
+
+    // 驗證商品庫存
+    const invalidDetails = await Promise.all(
+      order_details.map(async (detail) => {
+        const { productid, quantity } = detail;
+        const [product] = await query(
+          "SELECT stock FROM onlineproducts WHERE productid = ?",
+          [productid]
+        );
+        if (product.stock < quantity) {
+          return productid;
+        }
+        return null;
+      })
+    ).then((productIds) => productIds.filter((id) => id !== null));
+
+    if (invalidDetails.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: `商品 ${invalidDetails.join(", ")} 庫存不足`
+      });
+    }
+
+    if (coupon_code) {
+      const [coupon] = await query("SELECT * FROM coupons WHERE code = ?", [
+        coupon_code
+      ]);
+      if (coupon) {
+        if (coupon.usage_count >= coupon.usage_limit) {
+          return res.status(400).json({
+            success: false,
+            message: "優惠券已達到使用上限"
+          });
+        } else {
+          const updateSql =
+            "UPDATE coupons SET usage_count = usage_count + 1 WHERE code = ?";
+          await query(updateSql, [coupon_code]);
+        }
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "優惠券不存在"
+        });
+      }
+    }
+
+    const postSql =
+      "INSERT INTO orders (order_id, user_id, phone, name,email,coupon_code, total_quantity, total_price, payment_method, shipping_address, ship_store, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const orderValues = [
+      order_id,
+      user_id,
+      phone,
+      name,
+      email,
+      coupon_code,
+      total_quantity,
+      total_price,
+      payment_method,
+      shipping_address,
+      ship_store,
+      status
+    ];
+    const result = await query(postSql, orderValues);
+
+    const detailInsertPromises = order_details.map((detail) => {
+      const { productid, quantity, price } = detail;
+      const addDetailSql =
+        "INSERT INTO order_details (order_id, productid, quantity, price) VALUES (?, ?, ?, ?)";
+      const detailValues = [order_id, productid, quantity, price];
+      return query(addDetailSql, detailValues);
+    });
+
+    const detailUpdatePromises = order_details.map((detail) => {
+      const { productid, quantity } = detail;
+      const updateProductSql =
+        "UPDATE onlineproducts SET stock = stock - ? WHERE productid = ?";
+      const updateValues = [quantity, productid];
+      return query(updateProductSql, updateValues);
+    });
+
+    await Promise.all([...detailInsertPromises, ...detailUpdatePromises]);
+
+    res.status(201).json({
+      success: true,
+      message: `訂單新增成功，訂單ID為 ${order_id}`
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "伺服器錯誤"
     });
   }
 });
