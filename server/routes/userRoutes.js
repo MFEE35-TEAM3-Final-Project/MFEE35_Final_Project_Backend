@@ -798,8 +798,11 @@ router.get("/orders", userPassport, async (req, res) => {
       const getOrderDetailsSql =
         "SELECT order_details.quantity, order_details.price, onlineproducts.* FROM order_details JOIN onlineproducts ON order_details.productid = onlineproducts.productid WHERE order_id = ?";
       const orderDetails = await query(getOrderDetailsSql, [order_id]);
-      // const getOrderProductDetailsSql = "SELECT  * FROM onlineproducts WHERE productid = ?";
-      // const orderproductDetails = await query(getOrderProductDetailsSql, [order_id.productid]);
+      orderDetails.forEach((product) => {
+        product.image = product.image
+          .split(",")
+          .filter((img) => img.trim() !== "");
+      });
       return {
         ...order,
         order_details: orderDetails
@@ -1136,6 +1139,11 @@ router.get("/favorite", userPassport, async (req, res) => {
       "SELECT favorite.*, onlineproducts.* FROM favorite JOIN onlineproducts ON favorite.productid = onlineproducts.productid WHERE user_id = ?",
       [user_id]
     );
+    favorites.forEach((product) => {
+      product.image = product.image
+        .split(",")
+        .filter((img) => img.trim() !== "");
+    });
     if (favorites.length === 0) {
       return res.status(404).json({
         success: false,
@@ -1712,111 +1720,7 @@ router.delete("/cart", userPassport, async (req, res) => {
   }
 });
 
-//user favorite
-router.get("/favorite", userPassport, async (req, res) => {
-  try {
-    const user_id = req.user[0].user_id;
-    const favorites = await query(
-      "SELECT favorite.*, onlineproducts.* FROM favorite JOIN onlineproducts ON favorite.productid = onlineproducts.productid WHERE user_id = ?",
-      [user_id]
-    );
-    if (favorites.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "没有追蹤清單"
-      });
-    }
 
-    res.json({
-      success: true,
-      message: favorites
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      success: false,
-      message: "伺服器錯誤"
-    });
-  }
-});
-
-router.post("/favorite", userPassport, async (req, res) => {
-  try {
-    const { productid } = req.body;
-    const user_id = req.user[0].user_id;
-    const [product] = await query(
-      "SELECT * FROM onlineproducts WHERE productid = ?",
-      [productid]
-    );
-
-    if (!product) {
-      return res.status(400).json({
-        success: false,
-        message: "該商品不存在"
-      });
-    }
-
-    const [favorite] = await query(
-      "SELECT * FROM favorite WHERE user_id = ? and productid = ?",
-      [user_id, productid]
-    );
-
-    if (favorite) {
-      return res.status(400).json({
-        success: false,
-        message: "已經加入該商品"
-      });
-    }
-
-    await query("INSERT INTO favorite (user_id, productid) VALUES (?, ?)", [
-      user_id,
-      productid
-    ]);
-
-    res.json({
-      success: true,
-      message: "商品已添加到我的最愛"
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      success: false,
-      message: "伺服器錯誤"
-    });
-  }
-});
-
-router.delete("/favorite", userPassport, async (req, res) => {
-  try {
-    const { productid } = req.body;
-    const user_id = req.user[0].user_id;
-    const [favorite] = await query(
-      "SELECT * FROM favorite WHERE productid = ? AND user_id = ?",
-      [productid, user_id]
-    );
-
-    if (!favorite) {
-      return res.status(404).json({
-        success: false,
-        message: "該收藏不存在"
-      });
-    }
-    await query("DELETE FROM favorite WHERE productid = ? AND user_id = ?", [
-      productid,
-      user_id
-    ]);
-    res.json({
-      success: true,
-      message: "已刪除該收藏"
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      success: false,
-      message: "伺服器錯誤"
-    });
-  }
-});
 
 //user coupon
 
