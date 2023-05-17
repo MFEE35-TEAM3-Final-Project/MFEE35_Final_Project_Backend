@@ -1,0 +1,1130 @@
+{
+	"info": {
+		"_postman_id": "3dddd7d9-2c4e-4669-91cf-ce4026e69347",
+		"name": "mfee35",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19485982"
+	},
+	"item": [
+		{
+			"name": "reg post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"takoyaki56@gmail.com\",\r\n    \"password\":\"takoyaki87\",\r\n    \"repeat_password\":\"takoyaki87\",\r\n    \"username\":\"takoyaki56\",\r\n    \"avatar\":\"https://imgur.com/4TuQJDn.jpg\",\r\n    \"gender\":\"male\",\r\n    \"birthday\":\"2000-02-29\",\r\n    \"phone\":\"0988775566\",\r\n    \"address\":\"林公司的地址\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonObject = pm.response.json();\r",
+							"var token = jsonObject[\"token\"];\r",
+							"pm.collectionVariables.set(\"userToken1\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\":\"test0516@test.com\",\r\n  \"password\":\"test0516\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonObject = pm.response.json();\r",
+							"var token = jsonObject[\"token\"];\r",
+							"pm.collectionVariables.set(\"userToken2\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\":\"takoyaki56@gmail.com\",\r\n  \"password\":\"takoyaki87\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{userToken1}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/check",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin reg",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"adminname\":\"aquamarine\",\r\n  \"email\":\"ai44510@oshi.com\",\r\n  \"password\":\"ai44510\",\r\n  \"repeat_password\":\"ai44510\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonObject = pm.response.json();\r",
+							"var token = jsonObject[\"token\"];\r",
+							"pm.collectionVariables.set(\"admintoken1\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\":\"hoshinoai556@oshi.com\",\r\n  \"password\":\"ai123456\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin login Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonObject = pm.response.json();\r",
+							"var token = jsonObject[\"token\"];\r",
+							"pm.collectionVariables.set(\"admintoken2\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\":\"ai44510@oshi.com\",\r\n  \"password\":\"ai44510\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin check",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admintoken1}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/check",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "articles  admin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admintoken1}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\":\"FITness test word 0516\",\r\n  \"sub_title\":\"mango\",\r\n  \"category\":\"NUTRITION\",\r\n  \"cover_image\":\"https://imgur.com/4TuQJDn.jpg\",\r\n  \"content\":\"<p>It's a sweet mango~</p>\",\r\n  \"is_published\":0\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/article",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"article"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "article/:article_id admin",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admintoken2}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"WHA 0516 \",\r\n    \"sub_title\":\"oaoaoaoao\",\r\n    \"category\":\"HEALTHY\",\r\n    \"cover_image\":\"https://imgur.com/4TuQJDn.jpg\",\r\n    \"content\":\"<p>InAFFFFFFFWWWWWWWWWWWWWWWW</p>\",\r\n    \"is_published\":0\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/article/8738c918-f849-4639-8bcb-86ab50a71977",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"article",
+						"8738c918-f849-4639-8bcb-86ab50a71977"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "article/:article_id  admin",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjc0Mjc5NTM5NjQsImVtYWlsIjoiYXJpbWFrYW5hMTdAb3NoaS5jb20iLCJleHAiOjE2ODI3NDg0MTcxNzAsImlhdCI6MTY4MjY2MjAxN30.45e07z0BJhwk0O3rgQHGL_LaKDGwYCeufj4gqcEU4ZQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/article/6c8e6d5a-3063-4086-96a5-eaefc2344949",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"article",
+						"6c8e6d5a-3063-4086-96a5-eaefc2344949"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "articles?",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI5NzMxMTAzMzMxIiwiZW1haWwiOiJBQUFBQUJCQkBnbWFpbC5jb20iLCJleHAiOjE2ODMyNzMwNjg2OTYsImlhdCI6MTY4MzE4NjY2OH0.bJ78r-i7RIgiwnLCW1zHXlhAv5eMaEXvrFys98S_V30",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/articles?per_page=3&page=1&category=HEALTHY",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"articles"
+					],
+					"query": [
+						{
+							"key": "per_page",
+							"value": "3"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "category",
+							"value": "HEALTHY"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "articles id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI5NzMxMTAzMzMxIiwiZW1haWwiOiJBQUFBQUJCQkBnbWFpbC5jb20iLCJleHAiOjE2ODMyNzMwNjg2OTYsImlhdCI6MTY4MzE4NjY2OH0.bJ78r-i7RIgiwnLCW1zHXlhAv5eMaEXvrFys98S_V30",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/articles/id=8738c918-f849-4639-8bcb-86ab50a71977",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"articles",
+						"id=8738c918-f849-4639-8bcb-86ab50a71977"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "articles? Copy 2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI5NzMxMTAzMzMxIiwiZW1haWwiOiJBQUFBQUJCQkBnbWFpbC5jb20iLCJleHAiOjE2ODMyNzMwNjg2OTYsImlhdCI6MTY4MzE4NjY2OH0.bJ78r-i7RIgiwnLCW1zHXlhAv5eMaEXvrFys98S_V30",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/articles?per_page=3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"articles"
+					],
+					"query": [
+						{
+							"key": "per_page",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exercise_records",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjk5NjA2Njk0NzAsImVtYWlsIjoiYmFuYW5hMDU4M0BmcnVpdHouY29tIiwiZXhwIjoxNjgxOTYwNTIyMTYyLCJpYXQiOjE2ODE4NzQxMjJ9.PScOPQiR2cRiFUMqu9qsG84YVNbCWiW9oqGjoQxPvh0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"gender\": \"female\",\r\n    \"birthday\": \"2023-03-30\",\r\n    \"weight\": 75,\r\n    \"height\": 172.5,\r\n    \"exercise_level\": 1.5,\r\n    \"record_date\":\"2023-04-16\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/exercise_records",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"exercise_records"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exercise_records",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI5OTYwNjY5NDcwIiwiZW1haWwiOiJiYW5hbmEwNTgzQGZydWl0ei5jb20iLCJleHAiOjE2ODIwNDk3OTE0NzgsImlhdCI6MTY4MTk2MzM5MX0.QjXJjfSeRtRFYoZzvu9w2jh_WAXthJP-SH4zlSjRhr8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/exercise_records?start_date=2023-04-01&end_date=2023-04-15",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"exercise_records"
+					],
+					"query": [
+						{
+							"key": "start_date",
+							"value": "2023-04-01"
+						},
+						{
+							"key": "end_date",
+							"value": "2023-04-15"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exercise_record",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI5OTYwNjY5NDcwIiwiZW1haWwiOiJiYW5hbmEwNTgzQGZydWl0ei5jb20iLCJleHAiOjE2ODIwNDk3OTE0NzgsImlhdCI6MTY4MTk2MzM5MX0.QjXJjfSeRtRFYoZzvu9w2jh_WAXthJP-SH4zlSjRhr8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/exercise_records?start_date=2023-04-01&end_date=2023-04-15",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"exercise_records"
+					],
+					"query": [
+						{
+							"key": "start_date",
+							"value": "2023-04-01"
+						},
+						{
+							"key": "end_date",
+							"value": "2023-04-15"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "food",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admintoken1}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n            \"category\": \"菇類\",\r\n            \"sample_name\": \"雞GGGGG\",\r\n            \"content_des\": \"生鮮,混合均勻打碎\",\r\n            \"common_name\": \"雞腿(蘑)菇,雞髀菇,墨水菇,一夜菇(毛頭鬼傘)\",\r\n            \"unit\": 100,\r\n            \"popularity\": 0,\r\n            \"calories\": 36,\r\n            \"calories_adjusted\": 32,\r\n            \"water\": 89.3,\r\n            \"crude_protein\": 2,\r\n            \"crude_fat\": 0,\r\n            \"saturated_fat\": 0,\r\n            \"carbohydrate\": 8,\r\n            \"sodium\": 11,\r\n            \"dietary_fiber\": 0,\r\n            \"trans_fat\": 0\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/food",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"food"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "food update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admintoken1}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n            \"category\": \"菇類\",\r\n            \"sample_name\": \"雞AAAAAAA\",\r\n            \"content_des\": \"生鮮,混合均勻打碎\",\r\n            \"common_name\": \"雞腿(蘑)菇,雞髀菇,墨水菇,一夜菇(毛頭鬼傘)\",\r\n            \"unit\": 100,\r\n            \"popularity\": 0,\r\n            \"calories\": 36,\r\n            \"calories_adjusted\": 32,\r\n            \"water\": 89.3,\r\n            \"crude_protein\": 2,\r\n            \"crude_fat\": 0,\r\n            \"saturated_fat\": 0,\r\n            \"carbohydrate\": 8,\r\n            \"sodium\": 11,\r\n            \"dietary_fiber\": 0,\r\n            \"trans_fat\": 0\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/food/food_id=78cf49ea-0320-4a5d-8e68-bc34a425e945",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"food",
+						"food_id=78cf49ea-0320-4a5d-8e68-bc34a425e945"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "food delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admintoken1}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/food/food_id=78cf49ea-0320-4a5d-8e68-bc34a425e945",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"food",
+						"food_id=78cf49ea-0320-4a5d-8e68-bc34a425e945"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "food",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/food/category=乳品類",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"food",
+						"category=乳品類"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "food search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/food/search?keyword=雞",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"food",
+						"search"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "雞"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "article_comments/ :article_id (user)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{userToken1}}",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "{{userToken2}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"comment\":\"VVVVVVVVVVV\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/article_comments/article_id=8738c918-f849-4639-8bcb-86ab50a71977",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"article_comments",
+						"article_id=8738c918-f849-4639-8bcb-86ab50a71977"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "article_comments/ :comment_id (user)",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI5NzMxMTAzMzMxIiwiZW1haWwiOiJBQUFBQUJCQkBnbWFpbC5jb20iLCJleHAiOjE2ODI3ODUzODkxODgsImlhdCI6MTY4MjY5ODk4OX0.IiAPXaQ6Ft69WhjHQqeW70P_sXiEaW24aQBUFh4hSWQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/article_comments/comment_id=2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"article_comments",
+						"comment_id=2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "article_comments/ :article_id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/articles/article_comments/article_id=83266c65-0353-48e0-8f8e-aa02c7642692",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"articles",
+						"article_comments",
+						"article_id=83266c65-0353-48e0-8f8e-aa02c7642692"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "meal_records",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{userToken2}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"meal_type\": \"breakfast\",\r\n    \"meal_date\": \"2023-05-04\",\r\n    \"food_id\": \"O0703401\",\r\n    \"food_qty\": 1\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/meal_records",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"meal_records"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "meal_records",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{userToken1}}",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "{{userToken2}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/meal_records?start_date=2023-04-30&end_date=2023-05-02",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"meal_records"
+					],
+					"query": [
+						{
+							"key": "start_date",
+							"value": "2023-04-30"
+						},
+						{
+							"key": "end_date",
+							"value": "2023-05-02"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "meal_records Copy",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{userToken2}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"meal_type\": \"dinner\",\r\n    \"meal_date\": \"2023-05-04\",\r\n    \"food_id\": \"O0703401\",\r\n    \"food_qty\": 5\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/user/meal_record/record_id=15",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"meal_record",
+						"record_id=15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user_list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{admintoken1}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/admin/user_list?per_page=10&page=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"admin",
+						"user_list"
+					],
+					"query": [
+						{
+							"key": "per_page",
+							"value": "10"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "variable_key",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "userToken1",
+			"value": ""
+		},
+		{
+			"key": "userToken2",
+			"value": ""
+		},
+		{
+			"key": "admintoken1",
+			"value": ""
+		},
+		{
+			"key": "admintoken2",
+			"value": ""
+		}
+	]
+}
