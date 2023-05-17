@@ -91,7 +91,7 @@ CREATE TABLE `article_comments` (
   PRIMARY KEY (`comment_id`),
   KEY `fk_article_comment_idx` (`article_id`),
   CONSTRAINT `fk_article_comment` FOREIGN KEY (`article_id`) REFERENCES `articles` (`article_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,6 +100,7 @@ CREATE TABLE `article_comments` (
 
 LOCK TABLES `article_comments` WRITE;
 /*!40000 ALTER TABLE `article_comments` DISABLE KEYS */;
+INSERT INTO `article_comments` VALUES (4,'7271242354','aae6cbdb-10f1-492d-a4b6-e8fddda1cd51','When I feel lonely I would buy some shares. It\'s nice to have a bit of company. :-|','2023-05-17 10:50:31','2023-05-17 10:50:31'),(5,'7271242354','aae6cbdb-10f1-492d-a4b6-e8fddda1cd51','AAAAAAAAAAAAAAAA','2023-05-17 10:50:47','2023-05-17 10:50:47'),(6,'6826965306','aae6cbdb-10f1-492d-a4b6-e8fddda1cd51','AAAAAAAAAAAAAAAA','2023-05-17 10:53:12','2023-05-17 10:53:12'),(7,'6826965306','aae6cbdb-10f1-492d-a4b6-e8fddda1cd51','VVVVVVVVVVV','2023-05-17 10:53:18','2023-05-17 10:53:18'),(8,'6826965306','8738c918-f849-4639-8bcb-86ab50a71977','VVVVVVVVVVV','2023-05-17 10:54:13','2023-05-17 10:54:13');
 /*!40000 ALTER TABLE `article_comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -498,4 +499,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-16 19:01:20
+-- Dump completed on 2023-05-17 19:18:18

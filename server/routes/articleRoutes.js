@@ -130,14 +130,47 @@ router.get("/id=:article_id", async (req, res) => {
 router.get("/article_comments/article_id=:article_id", async (req, res) => {
   try {
     const articleId = req.params.article_id;
-    const getSql = "SELECT * FROM article_comments WHERE article_id = ?";
+    const getSql =
+      "SELECT * FROM article_comments AS c LEFT JOIN users AS u ON c.user_id = u.user_id WHERE article_id = ?";
     const getResults = await query(getSql, [articleId]);
     if (getResults.length !== 0) {
+      const packResults = getResults.map(
+        ({
+          comment_id,
+          article_id,
+          comment,
+          created_at,
+          user_id,
+          email,
+          username,
+          avatar,
+          gender,
+          birthday,
+          phone,
+          address
+        }) => ({
+          comment_id,
+          article_id,
+          comment,
+          created_at,
+          user: {
+            user_id,
+            email,
+            username,
+            avatar,
+            gender,
+            birthday,
+            phone,
+            address
+          }
+        })
+      );
+
       res.status(200).json({
         success: true,
         article_id: articleId,
         comments_count: getResults.length,
-        comments: getResults
+        comments: packResults
       });
     } else {
       res.status(404).json({
