@@ -11,28 +11,53 @@ router.use((req, res, next) => {
 });
 
 // 根據 產品id來進行分類,若沒有帶初值為提取全部的產品
+// router.get("/getProductsById", async (req, res) => {
+//   try {
+//     const { productId } = req.query || "";
+//     if (productId === "") {
+//       const sql = "SELECT * FROM onlineProducts";
+//       const results = await query(sql);
+//       results.forEach((product) => {
+//         product.image = product.image
+//           .split(",")
+//           .filter((img) => img.trim() !== "");
+//       });
+//       return res.json(results);
+//     } else {
+//       const sql = "SELECT * FROM onlineProducts WHERE productId = ?";
+//       const results = await query(sql, [productId]);
+//       results.forEach((product) => {
+//         product.image = product.image
+//           .split(",")
+//           .filter((img) => img.trim() !== "");
+//       });
+//       return res.json(results);
+//     }
+//   } catch (err) {
+//     console.error(err);
+//     return res.sendStatus(500);
+//   }
+// });
 router.get("/getProductsById", async (req, res) => {
   try {
     const { productId } = req.query || "";
+    let sql;
     if (productId === "") {
-      const sql = "SELECT * FROM onlineProducts";
-      const results = await query(sql);
-      results.forEach((product) => {
-        product.image = product.image
-          .split(",")
-          .filter((img) => img.trim() !== "");
-      });
-      return res.json(results);
+      sql =
+        "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId";
     } else {
-      const sql = "SELECT * FROM onlineProducts WHERE productId = ?";
-      const results = await query(sql, [productId]);
-      results.forEach((product) => {
-        product.image = product.image
-          .split(",")
-          .filter((img) => img.trim() !== "");
-      });
-      return res.json(results);
+      sql =
+        "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId WHERE onlineProducts.productId = ?";
     }
+    const results = await query(sql, [productId]);
+    results.forEach((product) => {
+      product.image = product.image
+        .split(",")
+        .filter((img) => img.trim() !== "");
+      product.afterPrice = Math.round(product.price * product.activityDiscount);
+      product.discountedPrice = Math.round(product.price - product.afterPrice);
+    });
+    return res.json(results);
   } catch (err) {
     console.error(err);
     return res.sendStatus(500);
@@ -47,20 +72,23 @@ router.get("/getProducts", async (req, res) => {
     const offset = (page - 1) * limit;
 
     let countSql = "SELECT COUNT(*) AS count FROM onlineProducts";
-    let querySql = "SELECT * FROM onlineProducts LIMIT ? OFFSET ?";
+    let querySql =
+      // "SELECT * FROM onlineProducts LIMIT ? OFFSET ?";
+      "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId LIMIT ? OFFSET ?";
     let queryParams = [limit, offset];
 
     if (category) {
       countSql =
         "SELECT COUNT(*) AS count FROM onlineProducts WHERE category = ?";
       querySql =
-        "SELECT * FROM onlineProducts WHERE category = ? LIMIT ? OFFSET ?";
+        "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId WHERE category = ? LIMIT ? OFFSET ?";
       queryParams = [category, limit, offset];
     } else if (activityId) {
       countSql =
         "SELECT COUNT(*) AS count FROM onlineProducts WHERE activityId = ?";
       querySql =
-        "SELECT * FROM onlineProducts WHERE activityId = ? LIMIT ? OFFSET ?";
+        "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId WHERE onlineProducts.activityId = ? LIMIT ? OFFSET ?";
+
       queryParams = [activityId, limit, offset];
     }
 
@@ -73,6 +101,8 @@ router.get("/getProducts", async (req, res) => {
       product.image = product.image
         .split(",")
         .filter((img) => img.trim() !== "");
+      product.afterPrice = Math.round(product.price * product.activityDiscount);
+      product.discountedPrice = Math.round(product.price - product.afterPrice);
     });
 
     return res.json({ totalPages, results });
