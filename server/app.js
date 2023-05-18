@@ -28,6 +28,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/food", foodRoutes);
 app.use("/api/articles", articleRoutes);
 app.use("/api/product", productsRoutes);
+app.use("/api/orders", ordersRoutes);
 
 // 開始監聽
 app.listen(8080, () => {
