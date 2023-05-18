@@ -131,7 +131,7 @@ router.get("/article_comments/article_id=:article_id", async (req, res) => {
   try {
     const articleId = req.params.article_id;
     const getSql =
-      "SELECT * FROM article_comments AS c LEFT JOIN users AS u ON c.user_id = u.user_id WHERE article_id = ?";
+      "SELECT *, c.created_at as comment_time FROM article_comments AS c LEFT JOIN users AS u ON c.user_id = u.user_id WHERE article_id = ?";
     const getResults = await query(getSql, [articleId]);
     if (getResults.length !== 0) {
       const packResults = getResults.map(
@@ -139,7 +139,7 @@ router.get("/article_comments/article_id=:article_id", async (req, res) => {
           comment_id,
           article_id,
           comment,
-          created_at,
+          comment_time,
           user_id,
           email,
           username,
@@ -152,7 +152,7 @@ router.get("/article_comments/article_id=:article_id", async (req, res) => {
           comment_id,
           article_id,
           comment,
-          created_at,
+          comment_time,
           user: {
             user_id,
             email,
