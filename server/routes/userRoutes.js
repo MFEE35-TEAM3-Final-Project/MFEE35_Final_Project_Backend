@@ -982,13 +982,16 @@ router.get("/cart", userPassport, async (req, res) => {
   try {
     const user_id = req.user[0].user_id;
     const cart_list = await query(
-      "SELECT shopping_cart.*, onlineproducts.* FROM shopping_cart JOIN onlineproducts ON shopping_cart.productid = onlineproducts.productid WHERE user_id = ?",
+      "SELECT shopping_cart.*, onlineproducts.*, activity.activityDiscount FROM shopping_cart JOIN onlineproducts ON shopping_cart.productid = onlineproducts.productid LEFT JOIN activity ON onlineproducts.activityId = activitY.activityId WHERE user_id = ? ",
       [user_id]
     );
+
     cart_list.forEach((product) => {
       product.image = product.image
         .split(",")
         .filter((img) => img.trim() !== "");
+      product.afterPrice = Math.round(product.price * product.activityDiscount);
+      product.discountedPrice = Math.round(product.price - product.afterPrice);
     });
 
     if (cart_list.length === 0) {
@@ -1011,6 +1014,7 @@ router.get("/cart", userPassport, async (req, res) => {
     });
   }
 });
+
 
 router.post("/cart/add", userPassport, async (req, res) => {
   try {
