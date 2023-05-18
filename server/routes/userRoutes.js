@@ -985,6 +985,11 @@ router.get("/cart", userPassport, async (req, res) => {
       "SELECT shopping_cart.*, onlineproducts.* FROM shopping_cart JOIN onlineproducts ON shopping_cart.productid = onlineproducts.productid WHERE user_id = ?",
       [user_id]
     );
+    cart_list.forEach((product) => {
+      product.image = product.image
+        .split(",")
+        .filter((img) => img.trim() !== "");
+    });
 
     if (cart_list.length === 0) {
       res.json({
