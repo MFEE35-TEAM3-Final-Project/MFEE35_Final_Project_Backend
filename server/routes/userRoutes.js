@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const {
   registerValidation,
   loginValidation,
+  updeteUserValid,
   exerciseRecordsValidation,
   articleMegValid,
   mealRecordValid
@@ -175,6 +176,52 @@ router.post(
     }
   }
 );
+
+//更新會員資料
+router.put("/edit/id=:user_id", userPassport, async (req, res) => {
+  try {
+    const paramsUserId = req.params.user_id;
+    const passportUserId = req.user[0].user_id;
+    if (paramsUserId !== passportUserId)
+      return res.json({
+        success: false,
+        message: "編輯會員與登入會員不符"
+      });
+    // 檢查傳入格式
+    const { error: validError } = updeteUserValid(req.body);
+    if (validError)
+      return res.json({
+        success: false,
+        message: validError.details[0].message
+      });
+
+    const { username, avatar, gender, birthday, phone, address } = req.body;
+    const filterAvatar = xss(avatar);
+    const userData = {
+      username,
+      avatar: filterAvatar,
+      gender,
+      birthday,
+      phone,
+      address
+    };
+    let updateSql = "UPDATE users SET ? WHERE user_id = ?";
+    const result = await query(updateSql, [userData, paramsUserId]);
+    const affectedRows = result.affectedRows;
+    if (affectedRows > 0) {
+      res.status(200).json({
+        success: true,
+        message: "會員資料更新成功",
+        user_id: paramsUserId
+      });
+    } else {
+      res.json({ success: false, message: "無法新增會員資料" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "伺服器發生錯誤" });
+  }
+});
 
 //body_specific
 router.post("/exercise_records", userPassport, async (req, res) => {
@@ -773,8 +820,6 @@ router.post("/orders", userPassport, async (req, res) => {
       success: true,
       message: `訂單新增成功，訂單ID為 ${order_id}`
     });
-
-
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -921,7 +966,6 @@ router.put("/orders/:order_id/cancel", userPassport, async (req, res) => {
   }
 });
 
-
 //刪除
 router.delete("/orders/:order_id", userPassport, async (req, res) => {
   try {
@@ -1015,13 +1059,12 @@ router.get("/cart", userPassport, async (req, res) => {
   }
 });
 
-
 router.post("/cart/add", userPassport, async (req, res) => {
   try {
     const user_id = req.user[0].user_id;
     const { productid, quantity } = req.body;
     let [cart] = await query(
-      'SELECT * FROM shopping_cart WHERE user_id = ? and productid= ?',
+      "SELECT * FROM shopping_cart WHERE user_id = ? and productid= ?",
       [user_id, productid]
     );
 
@@ -1062,7 +1105,7 @@ router.post("/cart/add", userPassport, async (req, res) => {
         do {
           new_cart_id = 100000 + Math.floor(Math.random() * 90000);
           [cart] = await query(
-            'SELECT * FROM shopping_cart WHERE cart_id = ?',
+            "SELECT * FROM shopping_cart WHERE cart_id = ?",
             [new_cart_id]
           );
         } while (cart);
@@ -1076,10 +1119,9 @@ router.post("/cart/add", userPassport, async (req, res) => {
       let new_cart_id;
       do {
         new_cart_id = 100000 + Math.floor(Math.random() * 90000);
-        [cart] = await query(
-          'SELECT * FROM shopping_cart WHERE cart_id = ?',
-          [new_cart_id]
-        );
+        [cart] = await query("SELECT * FROM shopping_cart WHERE cart_id = ?", [
+          new_cart_id
+        ]);
       } while (cart);
 
       const [product] = await query(
@@ -1112,7 +1154,7 @@ router.post("/cart/add", userPassport, async (req, res) => {
   }
 });
 
-router.put('/cart/update', userPassport, async (req, res) => {
+router.put("/cart/update", userPassport, async (req, res) => {
   try {
     const { cart_id, quantity } = req.body;
     // 檢查購物車是否存在

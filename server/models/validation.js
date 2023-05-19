@@ -25,6 +25,20 @@ const loginValidation = (data) => {
   });
   return schema.validate(data);
 };
+const updeteUserValid = (data) => {
+  const schema = Joi.object({
+    username: Joi.string().max(30).empty(""),
+    avatar: Joi.string().max(255).empty(""),
+    gender: Joi.string().valid("female", "male"),
+    birthday: Joi.date().empty(""),
+    phone: Joi.string()
+      .pattern(/^\d{9,10}$/)
+      .empty(""),
+    address: Joi.string().max(100, "utf8").empty("")
+  });
+
+  return schema.validate(data);
+};
 
 // Admins
 const adminRegValidation = (data) => {
@@ -113,6 +127,7 @@ const foodValid = (data) => {
 module.exports = {
   registerValidation,
   loginValidation,
+  updeteUserValid,
   adminRegValidation,
   adminLoginValidation,
   exerciseRecordsValidation,
