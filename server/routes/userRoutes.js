@@ -475,7 +475,6 @@ router.post("/meal_records", userPassport, async (req, res) => {
 });
 
 // 原版
-// 原版
 router.get("/meal_records", userPassport, async (req, res) => {
   try {
     const userId = req.user[0].user_id;
