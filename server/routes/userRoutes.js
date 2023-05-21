@@ -13,7 +13,7 @@ const {
   updeteUserValid,
   exerciseRecordsValidation,
   articleMegValid,
-  mealRecordValid
+  mealRecordValid,
 } = require("../models/validation");
 const { userPassport } = require("../models/passport");
 const xss = require("xss");
@@ -33,7 +33,7 @@ router.post("/register", async (req, res) => {
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message
+        message: validError.details[0].message,
       });
 
     const {
@@ -44,7 +44,7 @@ router.post("/register", async (req, res) => {
       gender,
       birthday,
       phone,
-      address
+      address,
     } = req.body;
 
     // 檢查email是否已經存在
@@ -72,7 +72,7 @@ router.post("/register", async (req, res) => {
         gender,
         birthday,
         phone,
-        address
+        address,
       };
       let insertSql = "INSERT INTO users SET ?";
       const result = await query(insertSql, userData);
@@ -81,7 +81,7 @@ router.post("/register", async (req, res) => {
         res.status(201).json({
           success: true,
           message: `會員資料新增 ${result.affectedRows}筆 成功 ${result.insertId}`,
-          user_id: userId
+          user_id: userId,
         });
       } else {
         res.json({ success: false, message: "無法新增會員資料" });
@@ -101,7 +101,7 @@ router.post("/login", async (req, res) => {
     if (validError) {
       return res.json({
         success: false,
-        message: validError.details[0].message
+        message: validError.details[0].message,
       });
     }
 
@@ -123,7 +123,7 @@ router.post("/login", async (req, res) => {
         const tokenObj = {
           _id: matchUser.user_id,
           email: matchUser.email,
-          exp: expDate
+          exp: expDate,
         };
         let token = jwt.sign(tokenObj, process.env.PASSPORT_SECRET);
 
@@ -132,13 +132,13 @@ router.post("/login", async (req, res) => {
           message: `會員登入成功`,
           user_id: matchUser.user_id,
           token: "JWT " + token,
-          exp: expDate
+          exp: expDate,
         });
       } else {
         // 密碼錯誤
         return res.status(401).json({
           success: false,
-          message: `密碼錯誤 ${matchUser.user_id}`
+          message: `密碼錯誤 ${matchUser.user_id}`,
         });
       }
     }
@@ -146,7 +146,7 @@ router.post("/login", async (req, res) => {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -164,14 +164,14 @@ router.post(
     return res.status(200).json({
       success: true,
       message: "已認證 Token",
-      user: req.user[0]
+      user: req.user[0],
     });
   },
   (err, req, res, next) => {
     if (err) {
       return res.status(401).json({
         success: false,
-        message: "Token 錯誤，請重新登入"
+        message: "Token 錯誤，請重新登入",
       });
     }
   }
@@ -185,14 +185,14 @@ router.put("/edit/id=:user_id", userPassport, async (req, res) => {
     if (paramsUserId !== passportUserId)
       return res.json({
         success: false,
-        message: "編輯會員與登入會員不符"
+        message: "編輯會員與登入會員不符",
       });
     // 檢查傳入格式
     const { error: validError } = updeteUserValid(req.body);
     if (validError)
       return res.json({
         success: false,
-        message: validError.details[0].message
+        message: validError.details[0].message,
       });
 
     const { username, avatar, gender, birthday, phone, address } = req.body;
@@ -203,7 +203,7 @@ router.put("/edit/id=:user_id", userPassport, async (req, res) => {
       gender,
       birthday,
       phone,
-      address
+      address,
     };
     let updateSql = "UPDATE users SET ? WHERE user_id = ?";
     const result = await query(updateSql, [userData, paramsUserId]);
@@ -212,7 +212,7 @@ router.put("/edit/id=:user_id", userPassport, async (req, res) => {
       res.status(200).json({
         success: true,
         message: "會員資料更新成功",
-        user_id: paramsUserId
+        user_id: paramsUserId,
       });
     } else {
       res.json({ success: false, message: "無法新增會員資料" });
@@ -234,7 +234,7 @@ router.post("/exercise_records", userPassport, async (req, res) => {
     if (validError) {
       return res.json({
         success: false,
-        message: validError.details[0].message
+        message: validError.details[0].message,
       });
     }
     let bodyData = {
@@ -244,7 +244,7 @@ router.post("/exercise_records", userPassport, async (req, res) => {
       weight: weight,
       height: height,
       exercise_level: exercise_level,
-      record_date: record_date
+      record_date: record_date,
     };
     // 檢查紀錄天是否已經有紀錄
     const checkdateSql =
@@ -257,7 +257,7 @@ router.post("/exercise_records", userPassport, async (req, res) => {
       const insertSql = "INSERT INTO exercise_records SET ?";
       const result = await query(insertSql, {
         ...bodyData,
-        exercise_records_id: recordId
+        exercise_records_id: recordId,
       });
       const affectedRows = result.affectedRows;
       console.log(result);
@@ -265,7 +265,7 @@ router.post("/exercise_records", userPassport, async (req, res) => {
         return res.status(201).json({
           success: true,
           message: `會員體態追蹤新增 ${result.affectedRows}筆 成功`,
-          recordId
+          recordId,
         });
       } else {
         return res.json({ success: false, message: "無法新增會員體態追蹤" });
@@ -279,14 +279,14 @@ router.post("/exercise_records", userPassport, async (req, res) => {
       return res.json({
         success: true,
         message: "該日期資料更新完成",
-        recordId
+        recordId,
       });
     }
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -309,13 +309,13 @@ router.get("/exercise_records", userPassport, async (req, res) => {
     return res.status(200).json({
       success: true,
       user_id: userId,
-      records: getResults
+      records: getResults,
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -335,19 +335,19 @@ router.delete(
         return res.status(404).json({
           success: false,
           message: "找不到紀錄",
-          recordId
+          recordId,
         });
       } else {
         return res.status(200).json({
           success: true,
-          message: "已刪除紀錄"
+          message: "已刪除紀錄",
         });
       }
     } catch (error) {
       console.error(error);
       return res.status(500).json({
         success: false,
-        message: "伺服器錯誤"
+        message: "伺服器錯誤",
       });
     }
   }
@@ -366,14 +366,14 @@ router.post(
       if (validError) {
         return res.json({
           success: false,
-          message: validError.details[0].message
+          message: validError.details[0].message,
         });
       }
       const filteredComment = xss(comment);
       const commentDate = {
         article_id: articleId,
         user_id: userId,
-        comment: filteredComment
+        comment: filteredComment,
       };
       const postSql = "INSERT INTO article_comments SET ? ";
       const postResult = await query(postSql, commentDate);
@@ -382,19 +382,19 @@ router.post(
         return res.status(201).json({
           success: true,
           message: "新增留言成功",
-          article_id: articleId
+          article_id: articleId,
         });
       } else {
         return res.json({
           success: false,
-          message: "留言失敗"
+          message: "留言失敗",
         });
       }
     } catch (error) {
       console.log(error);
       return res.status(500).json({
         success: false,
-        message: "伺服器錯誤"
+        message: "伺服器錯誤",
       });
     }
   }
@@ -413,19 +413,19 @@ router.delete(
       if (affectedRows >= 1) {
         return res.status(200).json({
           success: true,
-          message: "已刪除留言"
+          message: "已刪除留言",
         });
       } else {
         return res.status(404).json({
           success: false,
-          message: "找不到留言"
+          message: "找不到留言",
         });
       }
     } catch (error) {
       console.log(error);
       return res.status(500).json({
         success: false,
-        message: "伺服器錯誤"
+        message: "伺服器錯誤",
       });
     }
   }
@@ -441,7 +441,7 @@ router.post("/meal_records", userPassport, async (req, res) => {
     if (validError) {
       return res.json({
         success: false,
-        message: validError.details[0].message
+        message: validError.details[0].message,
       });
     }
     const recordData = {
@@ -449,7 +449,7 @@ router.post("/meal_records", userPassport, async (req, res) => {
       meal_date: meal_date,
       meal_type: meal_type,
       food_id: food_id,
-      food_qty: food_qty
+      food_qty: food_qty,
     };
     const postSql = "INSERT INTO meal_records SET ? ";
     const { affectedRows } = await query(postSql, recordData);
@@ -457,23 +457,24 @@ router.post("/meal_records", userPassport, async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "新增紀錄成功",
-        user_id: userId
+        user_id: userId,
       });
     } else {
       return res.status(422).json({
         success: false,
-        message: "新增紀錄錯誤"
+        message: "新增紀錄錯誤",
       });
     }
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
 
+// 原版
 // 原版
 router.get("/meal_records", userPassport, async (req, res) => {
   try {
@@ -489,49 +490,98 @@ router.get("/meal_records", userPassport, async (req, res) => {
     }
     const results = await query(getSql, getParams);
 
-    const formattedResults = results.map((result) => ({
-      record_id: result.record_id,
-      user_id: result.user_id,
-      meal_date: result.meal_date,
-      meal_type: result.meal_type,
-      food_qty: result.food_qty,
-      food_info: {
-        food_id: result.food_id,
-        name: result.name,
-        content_des: result.content_des,
-        unit: result.unit,
-        calories: result.calories,
-        carbohydrate: result.carbohydrate,
-        protein: result.protein,
-        saturated_fat: result.saturated_fat,
-        sodium: result.sodium
-      },
-      total_weight: Math.floor(result.unit * result.food_qty),
-      total_calories: Math.floor(result.calories * result.food_qty),
-      total_carbohydrate: Math.floor(result.carbohydrate * result.food_qty),
-      total_protein: Math.floor(result.protein * result.food_qty),
-      total_saturated_fat: Math.floor(result.saturated_fat * result.food_qty),
-      total_sodium: Math.floor(result.sodium * result.food_qty)
-    }));
+    const groupedResults = {};
+    results.forEach((result) => {
+      const date = result.meal_date.toISOString().split("T")[0];
+      if (!groupedResults[date]) {
+        groupedResults[date] = {
+          total_calories: 0,
+          total_carbohydrate: 0,
+          total_protein: 0,
+          total_saturated_fat: 0,
+          total_sodium: 0,
+          records: [],
+        };
+      }
+      const total_calories = Math.floor(result.calories * result.food_qty);
+      const total_carbohydrate = Math.floor(
+        result.carbohydrate * result.food_qty
+      );
+      const total_protein = Math.floor(result.protein * result.food_qty);
+      const total_saturated_fat = Math.floor(
+        result.saturated_fat * result.food_qty
+      );
+      const total_sodium = Math.floor(result.sodium * result.food_qty);
+      groupedResults[date].total_calories += total_calories;
+      groupedResults[date].total_carbohydrate += total_carbohydrate;
+      groupedResults[date].total_protein += total_protein;
+      groupedResults[date].total_saturated_fat += total_saturated_fat;
+      groupedResults[date].total_sodium += total_sodium;
+      groupedResults[date].records.push({
+        record_id: result.record_id,
+        user_id: result.user_id,
+        meal_date: result.meal_date,
+        meal_type: result.meal_type,
+        food_qty: result.food_qty,
+        food_info: {
+          food_id: result.food_id,
+          name: result.name,
+          content_des: result.content_des,
+          unit: result.unit,
+          calories: result.calories,
+          carbohydrate: result.carbohydrate,
+          protein: result.protein,
+          saturated_fat: result.saturated_fat,
+          sodium: result.sodium,
+        },
+        total_weight: Math.floor(result.unit * result.food_qty),
+        total_calories: total_calories,
+        total_carbohydrate: Math.floor(result.carbohydrate * result.food_qty),
+        total_protein: Math.floor(result.protein * result.food_qty),
+        total_saturated_fat: Math.floor(result.saturated_fat * result.food_qty),
+        total_sodium: Math.floor(result.sodium * result.food_qty),
+      });
+    });
 
-    if (results.length > 0) {
+    const groupedResultsArray = Object.entries(groupedResults).map(
+      ([
+        date,
+        {
+          total_calories,
+          total_carbohydrate,
+          total_protein,
+          total_saturated_fat,
+          total_sodium,
+          records,
+        },
+      ]) => ({
+        date,
+        total_calories,
+        total_carbohydrate,
+        total_protein,
+        total_saturated_fat,
+        total_sodium,
+        records,
+      })
+    );
+
+    if (groupedResultsArray.length > 0) {
       return res.status(200).json({
         success: true,
         message: "取得紀錄成功",
-        user_id: userId,
-        records: formattedResults
+        groupedResults: groupedResultsArray,
       });
     } else {
       return res.status(404).json({
         success: false,
-        message: "該時間段沒有紀錄"
+        message: "該時間段沒有紀錄",
       });
     }
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -628,7 +678,7 @@ router.put(
       if (validError) {
         return res.json({
           success: false,
-          message: validError.details[0].message
+          message: validError.details[0].message,
         });
       }
       const recordData = {
@@ -636,31 +686,31 @@ router.put(
         meal_date: meal_date,
         meal_type: meal_type,
         food_id: food_id,
-        food_qty: food_qty
+        food_qty: food_qty,
       };
       const putSql =
         "UPDATE meal_records SET ? WHERE user_id = ? AND record_id = ? ";
       const { affectedRows } = await query(putSql, [
         recordData,
         userId,
-        recordId
+        recordId,
       ]);
       if (affectedRows > 0) {
         return res.status(200).json({
           success: true,
-          message: "紀錄編輯成功"
+          message: "紀錄編輯成功",
         });
       } else {
         return res.status(422).json({
           success: false,
-          message: "紀錄編輯錯誤"
+          message: "紀錄編輯錯誤",
         });
       }
     } catch (error) {
       console.log(error);
       return res.status(500).json({
         success: false,
-        message: "伺服器錯誤"
+        message: "伺服器錯誤",
       });
     }
   }
@@ -679,19 +729,19 @@ router.delete(
       if (affectedRows > 0) {
         return res.status(200).json({
           success: true,
-          message: "已刪除紀錄"
+          message: "已刪除紀錄",
         });
       } else {
         return res.status(422).json({
           success: false,
-          message: "找不到紀錄"
+          message: "找不到紀錄",
         });
       }
     } catch (error) {
       console.log(error);
       return res.status(500).json({
         success: false,
-        message: "伺服器錯誤"
+        message: "伺服器錯誤",
       });
     }
   }
@@ -712,14 +762,14 @@ router.post("/orders", userPassport, async (req, res) => {
       payment_method,
       shipping_address,
       ship_store,
-      order_details
+      order_details,
     } = req.body;
 
     const user_id = req.user[0].user_id;
     if (!order_details || order_details.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "訂單詳情為空"
+        message: "訂單詳情為空",
       });
     }
 
@@ -741,19 +791,19 @@ router.post("/orders", userPassport, async (req, res) => {
     if (invalidDetails.length > 0) {
       return res.status(400).json({
         success: false,
-        message: `商品 ${invalidDetails.join(", ")} 庫存不足`
+        message: `商品 ${invalidDetails.join(", ")} 庫存不足`,
       });
     }
 
     if (coupon_code) {
       const [coupon] = await query("SELECT * FROM coupons WHERE code = ?", [
-        coupon_code
+        coupon_code,
       ]);
       if (coupon) {
         if (coupon.usage_count >= coupon.usage_limit) {
           return res.status(400).json({
             success: false,
-            message: "優惠券已達到使用上限"
+            message: "優惠券已達到使用上限",
           });
         } else {
           const updateSql =
@@ -763,7 +813,7 @@ router.post("/orders", userPassport, async (req, res) => {
       } else {
         return res.status(400).json({
           success: false,
-          message: "優惠券不存在"
+          message: "優惠券不存在",
         });
       }
     }
@@ -782,7 +832,7 @@ router.post("/orders", userPassport, async (req, res) => {
       payment_method,
       shipping_address,
       ship_store,
-      status
+      status,
     ];
     const result = await query(postSql, orderValues);
 
@@ -818,13 +868,13 @@ router.post("/orders", userPassport, async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: `訂單新增成功，訂單ID為 ${order_id}`
+      message: `訂單新增成功，訂單ID為 ${order_id}`,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -849,7 +899,7 @@ router.get("/orders", userPassport, async (req, res) => {
     if (!orders.length) {
       return res.status(404).json({
         success: false,
-        message: "找不到任何訂單"
+        message: "找不到任何訂單",
       });
     }
 
@@ -865,7 +915,7 @@ router.get("/orders", userPassport, async (req, res) => {
       });
       return {
         ...order,
-        order_details: orderDetails
+        order_details: orderDetails,
       };
     });
 
@@ -873,13 +923,13 @@ router.get("/orders", userPassport, async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: ordersWithDetails
+      data: ordersWithDetails,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -896,7 +946,7 @@ router.put("/orders/:orderId", userPassport, async (req, res) => {
     if (!existingOrder) {
       return res.status(404).json({
         success: false,
-        message: "訂單不存在"
+        message: "訂單不存在",
       });
     }
 
@@ -906,18 +956,18 @@ router.put("/orders/:orderId", userPassport, async (req, res) => {
       shipping_address,
       shipping_method,
       ship_store,
-      orderId
+      orderId,
     ]);
 
     res.status(200).json({
       success: true,
-      message: `訂單更新成功，訂單ID為 ${orderId}`
+      message: `訂單更新成功，訂單ID為 ${orderId}`,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -934,7 +984,7 @@ router.put("/orders/:order_id/cancel", userPassport, async (req, res) => {
     if (!existingOrder) {
       return res.status(404).json({
         success: false,
-        message: "訂單不存在"
+        message: "訂單不存在",
       });
     }
 
@@ -955,13 +1005,13 @@ router.put("/orders/:order_id/cancel", userPassport, async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: `訂單已成功取消，訂單ID為 ${orderId}`
+      message: `訂單已成功取消，訂單ID為 ${orderId}`,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -980,7 +1030,7 @@ router.delete("/orders/:order_id", userPassport, async (req, res) => {
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: "找不到該訂單"
+        message: "找不到該訂單",
       });
     }
 
@@ -1010,13 +1060,13 @@ router.delete("/orders/:order_id", userPassport, async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: `訂單已刪除，訂單ID為 ${order_id}`
+      message: `訂單已刪除，訂單ID為 ${order_id}`,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -1042,19 +1092,19 @@ router.get("/cart", userPassport, async (req, res) => {
       res.json({
         success: false,
         message: "購物車內沒有東西",
-        data: []
+        data: [],
       });
     } else {
       res.json({
         success: true,
-        data: cart_list
+        data: cart_list,
       });
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -1085,13 +1135,13 @@ router.post("/cart/add", userPassport, async (req, res) => {
       if (!product) {
         return res.status(400).json({
           success: false,
-          message: "查無此商品"
+          message: "查無此商品",
         });
       }
       if (product.stock < total_quantity) {
         return res.status(400).json({
           success: false,
-          message: "該商品庫存不足"
+          message: "該商品庫存不足",
         });
       }
 
@@ -1120,7 +1170,7 @@ router.post("/cart/add", userPassport, async (req, res) => {
       do {
         new_cart_id = 100000 + Math.floor(Math.random() * 90000);
         [cart] = await query("SELECT * FROM shopping_cart WHERE cart_id = ?", [
-          new_cart_id
+          new_cart_id,
         ]);
       } while (cart);
 
@@ -1132,7 +1182,7 @@ router.post("/cart/add", userPassport, async (req, res) => {
       if (product.stock < parseInt(quantity)) {
         return res.status(400).json({
           success: false,
-          message: "該商品庫存不足"
+          message: "該商品庫存不足",
         });
       }
 
@@ -1143,13 +1193,13 @@ router.post("/cart/add", userPassport, async (req, res) => {
     }
     res.json({
       success: true,
-      message: "商品已添加到購物車"
+      message: "商品已添加到購物車",
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -1165,7 +1215,7 @@ router.put("/cart/update", userPassport, async (req, res) => {
     if (!cart) {
       return res.status(404).json({
         success: false,
-        message: "該購物車不存在"
+        message: "該購物車不存在",
       });
     }
 
@@ -1177,32 +1227,32 @@ router.put("/cart/update", userPassport, async (req, res) => {
     if (product.stock < quantity) {
       return res.status(400).json({
         success: false,
-        message: "該商品庫存不足"
+        message: "該商品庫存不足",
       });
     }
     if (quantity < 1) {
       return res.status(400).json({
         success: false,
-        message: "商品不得為0"
+        message: "商品不得為0",
       });
     }
 
     // 更新購物車商品數量
     await query("UPDATE shopping_cart SET quantity = ?  WHERE cart_id = ?", [
       quantity,
-      cart_id
+      cart_id,
     ]);
 
     // 返回成功響應
     res.json({
       success: true,
-      message: "購物車更新成功"
+      message: "購物車更新成功",
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -1221,7 +1271,7 @@ router.delete("/cart/:cart_id", userPassport, async (req, res) => {
     if (!cart) {
       return res.status(404).json({
         success: false,
-        message: "找不到該購物車"
+        message: "找不到該購物車",
       });
     }
 
@@ -1229,13 +1279,13 @@ router.delete("/cart/:cart_id", userPassport, async (req, res) => {
 
     res.json({
       success: true,
-      message: "已刪除"
+      message: "已刪除",
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -1245,13 +1295,13 @@ router.delete("/cart", userPassport, async (req, res) => {
     await query("DELETE FROM shopping_cart WHERE user_id = ?", [user_id]);
     res.json({
       success: true,
-      message: "已刪除購物車內所有商品"
+      message: "已刪除購物車內所有商品",
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -1272,19 +1322,19 @@ router.get("/favorite", userPassport, async (req, res) => {
     if (favorites.length === 0) {
       return res.status(404).json({
         success: false,
-        message: "没有追蹤清單"
+        message: "没有追蹤清單",
       });
     }
 
     res.json({
       success: true,
-      message: favorites
+      message: favorites,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -1301,7 +1351,7 @@ router.post("/favorite", userPassport, async (req, res) => {
     if (!product) {
       return res.status(400).json({
         success: false,
-        message: "該商品不存在"
+        message: "該商品不存在",
       });
     }
 
@@ -1313,24 +1363,24 @@ router.post("/favorite", userPassport, async (req, res) => {
     if (favorite) {
       return res.status(400).json({
         success: false,
-        message: "已經加入該商品"
+        message: "已經加入該商品",
       });
     }
 
     await query("INSERT INTO favorite (user_id, productid) VALUES (?, ?)", [
       user_id,
-      productid
+      productid,
     ]);
 
     res.json({
       success: true,
-      message: "商品已添加到我的最愛"
+      message: "商品已添加到我的最愛",
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
@@ -1347,22 +1397,22 @@ router.delete("/favorite", userPassport, async (req, res) => {
     if (!favorite) {
       return res.status(404).json({
         success: false,
-        message: "該收藏不存在"
+        message: "該收藏不存在",
       });
     }
     await query("DELETE FROM favorite WHERE productid = ? AND user_id = ?", [
       productid,
-      user_id
+      user_id,
     ]);
     res.json({
       success: true,
-      message: "已刪除該收藏"
+      message: "已刪除該收藏",
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: "伺服器錯誤"
+      message: "伺服器錯誤",
     });
   }
 });
