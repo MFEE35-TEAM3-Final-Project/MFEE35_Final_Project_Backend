@@ -563,12 +563,17 @@ router.get("/orders", adminPassport, async (req, res) => {
       const orderIds = getOrdersResults
         .map((orders) => `'${orders.order_id}'`)
         .join(",");
-      const getOrderDetailsSql = `SELECT * FROM order_details WHERE order_id IN (${orderIds})`;
+      const getOrderDetailsSql = `SELECT * , onlineproducts.* FROM  order_details JOIN onlineproducts WHERE order_id IN (${orderIds})`;
       const getOrderDetailsResults = await query(getOrderDetailsSql);
       const orders = getOrdersResults.map((orders) => {
         orders.order_details = getOrderDetailsResults.filter(
           (detail) => detail.order_id === orders.order_id
         );
+        orders.order_details.forEach((product) => {
+          product.image = product.image
+            .split(",")
+            .filter((img) => img.trim() !== "");
+        });
         return orders;
       });
       res.status(200).json({
@@ -589,6 +594,7 @@ router.get("/orders", adminPassport, async (req, res) => {
     });
   }
 });
+
 
 router.put("/orders/:order_id", adminPassport, async (req, res) => {
   try {
