@@ -748,8 +748,9 @@ router.delete(
 
 //user orders
 router.post("/orders", userPassport, async (req, res) => {
+  const user_id = req.user[0].user_id;
   try {
-    const status = "created";
+    const status = "待出貨";
     const order_id = uuidv4();
     const {
       phone,
@@ -764,7 +765,6 @@ router.post("/orders", userPassport, async (req, res) => {
       order_details,
     } = req.body;
 
-    const user_id = req.user[0].user_id;
     if (!order_details || order_details.length === 0) {
       return res.status(400).json({
         success: false,
@@ -852,18 +852,15 @@ router.post("/orders", userPassport, async (req, res) => {
     });
 
     await Promise.all([...detailInsertPromises, ...detailUpdatePromises]);
-    const cart_id = order_details.map((detail) => detail.cart_id);
-    await Promise.all(cart_id.map((cart_id) => deleteCartItems(cart_id)));
-    async function deleteCartItems(cart_id) {
-      try {
-        const deleteSql = "DELETE FROM shopping_cart WHERE cart_id = ?";
-        await query(deleteSql, [cart_id]);
-        console.log(`購物車 ${cart_id} 已成功删除`);
-      } catch (err) {
-        console.error(`刪除購物車 ${cart_id} 時出錯:`, err);
-        throw err;
-      }
-    }
+
+    const getcartSql = "SELECT cart_id FROM shopping_cart WHERE user_id = ?";
+    const getcart = await query(getcartSql, [user_id]);
+    const cart_ids = getcart.map((row) => row.cart_id);
+    console.log(cart_ids);
+
+    const deleteSql = "DELETE FROM shopping_cart WHERE cart_id IN (?)";
+    await query(deleteSql, [cart_ids]);
+    console.log(`購物車 ${cart_ids.join(", ")} 已成功刪除`);
 
     res.status(201).json({
       success: true,
@@ -877,6 +874,7 @@ router.post("/orders", userPassport, async (req, res) => {
     });
   }
 });
+
 
 //會員查詢訂單
 router.get("/orders", userPassport, async (req, res) => {
