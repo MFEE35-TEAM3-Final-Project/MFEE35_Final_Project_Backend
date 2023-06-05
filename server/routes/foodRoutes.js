@@ -58,22 +58,42 @@ router.get("/search", async (req, res) => {
 
     if (getResults.length > 0) {
       const {
+        category,
         sample_name,
-        Calories_adjusted,
-        carbohydrate,
+        content_des,
+        common_name,
+        unit,
+        popularity,
+        calories,
+        calories_adjusted,
+        water,
         crude_protein,
         crude_fat,
-        sodium
+        saturated_fat,
+        carbohydrate,
+        sodium,
+        dietary_fiber,
+        trans_fat
       } = getResults[0];
       return res.json({
         success: true,
         message: "已取得特定食物",
-        sample_name: sample_name,
-        Calories_adjusted: Calories_adjusted,
-        carbohydrate: carbohydrate,
-        crude_protein: crude_protein,
-        crude_fat: crude_fat,
-        sodium: sodium
+        category,
+        sample_name,
+        content_des,
+        common_name,
+        unit,
+        popularity,
+        calories,
+        calories_adjusted,
+        water,
+        crude_protein,
+        crude_fat,
+        saturated_fat,
+        carbohydrate,
+        sodium,
+        dietary_fiber,
+        trans_fat
       });
       // return res.json({
       //   success: true,

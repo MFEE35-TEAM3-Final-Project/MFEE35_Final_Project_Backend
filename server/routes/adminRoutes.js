@@ -34,7 +34,7 @@ router.post("/register", async (req, res) => {
         message: validError.details[0].message
       });
 
-    const { adminname, password, email } = req.body;
+    const { adminname, password, email, avatar } = req.body;
 
     // 檢查email是否已經存在
     const checkEmailSql =
@@ -50,12 +50,14 @@ router.post("/register", async (req, res) => {
       // 密碼加密
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
-      // console.log(hashedPassword);
+      const fAvatar = xss(avatar);
+
       // 新增使用者
       let adminId = Math.floor(1000000000 + Math.random() * 9000000000);
       const adminData = {
         admin_id: adminId,
         adminname,
+        avatar: fAvatar,
         password: hashedPassword,
         email
       };
@@ -113,7 +115,12 @@ router.post("/login", async (req, res) => {
         return res.status(200).send({
           success: true,
           message: `管理員登入成功 `,
-          admin_id: matchAdmin.admin_id,
+          admin: {
+            admin_id: matchAdmin.admin_id,
+            adminname: matchAdmin.adminname,
+            avatar: matchAdmin.avatar,
+            email: matchAdmin.email
+          },
           token: "JWT " + token,
           exp: expDate
         });
@@ -140,10 +147,17 @@ router.post(
   adminPassport,
   (req, res) => {
     console.log("anything come this OK fn");
+    const admin = req.user[0];
+    const adminData = {
+      admin_id: admin.admin_id,
+      adminname: admin.adminname,
+      avatar: admin.avatar,
+      email: admin.email
+    };
     return res.status(200).json({
       success: true,
       message: "已認證 Token",
-      admin: req.user[0]
+      admin: adminData
     });
   },
   (err, req, res, next) => {
@@ -304,22 +318,22 @@ router.post("/food", adminPassport, async (req, res) => {
     let foodId = uuidv4();
     const foodData = {
       food_id: foodId,
-      Calories: calories,
-      Calories_adjusted: calories_adjusted,
+      calories: calories,
+      calories_adjusted: calories_adjusted,
       category,
       sample_name,
-      content_des,
-      common_name,
+      content_des: content_des || "",
+      common_name: common_name || "",
       unit,
-      popularity,
-      water,
+      popularity: popularity || 0,
+      water: water || 0,
       crude_protein,
-      crude_fat,
+      crude_fat: crude_fat || 0,
       saturated_fat,
       carbohydrate,
       sodium,
-      dietary_fiber,
-      trans_fat
+      dietary_fiber: dietary_fiber || 0,
+      trans_fat: trans_fat || 0
     };
     const postSql = "INSERT INTO food SET ?";
     const { affectedRows } = await query(postSql, foodData);
@@ -327,7 +341,8 @@ router.post("/food", adminPassport, async (req, res) => {
       res.status(201).json({
         success: true,
         message: "已新增食物",
-        food_name: sample_name
+        food_name: sample_name,
+        food_id: foodId
       });
     } else {
       res.json({
@@ -374,8 +389,8 @@ router.put("/food/food_id=:food_id", adminPassport, async (req, res) => {
 
     const foodData = {
       food_id: foodId,
-      Calories: calories,
-      Calories_adjusted: calories_adjusted,
+      calories: calories,
+      calories_adjusted: calories_adjusted,
       category,
       sample_name,
       content_des,
@@ -397,7 +412,8 @@ router.put("/food/food_id=:food_id", adminPassport, async (req, res) => {
       res.status(200).json({
         success: true,
         message: "已更新食物資訊",
-        food_name: sample_name
+        food_name: sample_name,
+        food_id: foodId
       });
     } else {
       res.json({
@@ -443,15 +459,28 @@ router.delete("/food/food_id=:food_id", adminPassport, async (req, res) => {
 router.post("/addProducts", async (req, res) => {
   try {
     const productID = uuidv4();
-    const { name, description, price, stock, category, image } = req.body;
-    const productData = {
-      productid: productID,
+    const {
+      activityId,
       name,
       description,
+      storage_method,
       price,
       stock,
       category,
-      image
+      image,
+      food_id
+    } = req.body;
+    const productData = {
+      productid: productID,
+      activityId,
+      name,
+      description,
+      storage_method,
+      price,
+      stock,
+      category,
+      image,
+      food_id
     };
     const sql = "INSERT INTO onlineProducts SET ?";
     const { affectedRows } = await query(sql, productData);
@@ -464,6 +493,80 @@ router.post("/addProducts", async (req, res) => {
       res.json({
         success: false,
         message: "產品新增失敗。"
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: "伺服器錯誤。"
+    });
+  }
+});
+
+// 更新產品
+router.put("/products/:product_id", adminPassport, async (req, res) => {
+  try {
+    const productId = req.params.product_id;
+    const {
+      activityId,
+      name,
+      description,
+      storage_method,
+      price,
+      stock,
+      category,
+      image,
+      food_id
+    } = req.body;
+    const fImg = xss(image);
+    const productData = {
+      activityId,
+      name,
+      description,
+      storage_method,
+      price,
+      stock,
+      category,
+      image: fImg,
+      food_id
+    };
+    const sql = "UPDATE onlineProducts SET ? WHERE productid = ?";
+    const { affectedRows } = await query(sql, [productData, productId]);
+    if (affectedRows >= 1) {
+      res.status(200).json({
+        success: true,
+        message: "產品更新成功！"
+      });
+    } else {
+      res.json({
+        success: false,
+        message: "產品更新失敗。"
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: "伺服器錯誤。"
+    });
+  }
+});
+router.delete("/products/:product_id", adminPassport, async (req, res) => {
+  try {
+    const productId = req.params.product_id;
+
+    const sql = "DELETE FROM onlineProducts WHERE productid = ?";
+    const { affectedRows } = await query(sql, [productId]);
+    if (affectedRows >= 1) {
+      res.status(200).json({
+        success: true,
+        message: "產品刪除成功！"
+      });
+    } else {
+      res.json({
+        success: false,
+        message: "產品刪除失敗。"
       });
     }
   } catch (err) {
@@ -594,7 +697,6 @@ router.get("/orders", adminPassport, async (req, res) => {
     });
   }
 });
-
 
 router.put("/orders/:order_id", adminPassport, async (req, res) => {
   try {
