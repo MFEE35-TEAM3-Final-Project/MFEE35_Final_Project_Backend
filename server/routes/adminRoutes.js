@@ -658,8 +658,9 @@ router.get("/orders", adminPassport, async (req, res) => {
       getquery += " AND order_time BETWEEN ? AND ?";
       params.push(startDate, endDate);
     }
-
+    getquery += " ORDER BY create_time DESC";
     // 執行查詢
+
     const getOrdersResults = await query(getquery, params);
 
     if (getOrdersResults.length > 0) {
