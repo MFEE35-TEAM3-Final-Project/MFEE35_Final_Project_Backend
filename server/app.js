@@ -30,7 +30,7 @@ app.use("/api/articles", articleRoutes);
 app.use("/api/product", productsRoutes);
 app.use("/api/orders", ordersRoutes);
 app.use("/api/activity", activityRoutes);
-app.use("/api/discount", discountRoutes);
+// app.use("/api/discount", discountRoutes);
 app.use("/api/coupon", couponRoutes);
 
 // 開始監聽
