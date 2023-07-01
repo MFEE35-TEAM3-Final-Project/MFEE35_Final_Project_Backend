@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const dotenv = require("dotenv");
+// dotenv.config({ path: ".env" });
 dotenv.config({ path: ".env.local" });
 
 // Routes
@@ -15,6 +16,7 @@ const couponRoutes = require("./routes/couponRoutes");
 const productsRoutes = require("./routes/productsRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 const discountRoutes = require("./routes/discountRoutes");
+const imageRoutes = require("./routes/imageRoutes");
 
 //跨域設定
 app.use(cors());
@@ -32,6 +34,7 @@ app.use("/api/orders", ordersRoutes);
 app.use("/api/activity", activityRoutes);
 app.use("/api/discount", discountRoutes);
 app.use("/api/coupon", couponRoutes);
+app.use("/api/images", imageRoutes);
 
 // 開始監聽
 app.listen(8080, () => {

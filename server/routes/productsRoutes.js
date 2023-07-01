@@ -15,7 +15,7 @@ router.use((req, res, next) => {
 //   try {
 //     const { productId } = req.query || "";
 //     if (productId === "") {
-//       const sql = "SELECT * FROM onlineProducts";
+//       const sql = "SELECT * FROM online_products";
 //       const results = await query(sql);
 //       results.forEach((product) => {
 //         product.image = product.image
@@ -24,7 +24,7 @@ router.use((req, res, next) => {
 //       });
 //       return res.json(results);
 //     } else {
-//       const sql = "SELECT * FROM onlineProducts WHERE productId = ?";
+//       const sql = "SELECT * FROM online_products WHERE productId = ?";
 //       const results = await query(sql, [productId]);
 //       results.forEach((product) => {
 //         product.image = product.image
@@ -44,10 +44,10 @@ router.get("/getProductsById", async (req, res) => {
     let sql;
     if (productId === "") {
       sql =
-        "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId";
+        "SELECT online_products.*, activity.activityDiscount FROM online_products LEFT JOIN activity ON online_products.activityId = activity.activityId";
     } else {
       sql =
-        "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId WHERE onlineProducts.productId = ?";
+        "SELECT online_products.*, activity.activityDiscount FROM online_products LEFT JOIN activity ON online_products.activityId = activity.activityId WHERE online_products.productId = ?";
     }
     const results = await query(sql, [productId]);
     results.forEach((product) => {
@@ -71,23 +71,23 @@ router.get("/getProducts", async (req, res) => {
     const limit = 12;
     const offset = (page - 1) * limit;
 
-    let countSql = "SELECT COUNT(*) AS count FROM onlineProducts";
+    let countSql = "SELECT COUNT(*) AS count FROM online_products";
     let querySql =
-      // "SELECT * FROM onlineProducts LIMIT ? OFFSET ?";
-      "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId LIMIT ? OFFSET ?";
+      // "SELECT * FROM online_products LIMIT ? OFFSET ?";
+      "SELECT online_products.*, activity.activityDiscount FROM online_products LEFT JOIN activity ON online_products.activityId = activity.activityId LIMIT ? OFFSET ?";
     let queryParams = [limit, offset];
 
     if (category) {
       countSql =
-        "SELECT COUNT(*) AS count FROM onlineProducts WHERE category = ?";
+        "SELECT COUNT(*) AS count FROM online_products WHERE category = ?";
       querySql =
-        "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId WHERE category = ? LIMIT ? OFFSET ?";
+        "SELECT online_products.*, activity.activityDiscount FROM online_products LEFT JOIN activity ON online_products.activityId = activity.activityId WHERE category = ? LIMIT ? OFFSET ?";
       queryParams = [category, limit, offset];
     } else if (activityId) {
       countSql =
-        "SELECT COUNT(*) AS count FROM onlineProducts WHERE activityId = ?";
+        "SELECT COUNT(*) AS count FROM online_products WHERE activityId = ?";
       querySql =
-        "SELECT onlineProducts.*, activity.activityDiscount FROM onlineProducts LEFT JOIN activity ON onlineProducts.activityId = activity.activityId WHERE onlineProducts.activityId = ? LIMIT ? OFFSET ?";
+        "SELECT online_products.*, activity.activityDiscount FROM online_products LEFT JOIN activity ON online_products.activityId = activity.activityId WHERE online_products.activityId = ? LIMIT ? OFFSET ?";
 
       queryParams = [activityId, limit, offset];
     }
