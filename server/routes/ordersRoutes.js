@@ -175,7 +175,8 @@ router.post("/order", async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: `訂單新增成功，訂單ID為 ${order_id}`
+      message: `訂單新增成功，訂單ID為 ${order_id}`,
+      orderId: order_id
     });
   } catch (err) {
     console.log(err);
